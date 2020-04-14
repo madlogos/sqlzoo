@@ -1,0 +1,84 @@
+load data local infile './src/actor.csv' into table actor character set utf8 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/casting.csv' into table casting character set utf8 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/dept.csv' into table dept character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/eteam.csv' into table eteam character set utf8 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/game.csv' into table game character set utf8 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/ge.csv' into table ge character set utf8 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/goal.csv' into table goal character set utf8 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/movie.csv' into table movie character set utf8 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/nobel.csv' into table nobel character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/nss.csv' into table nss character set utf8 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/route.csv' into table route character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/stops.csv' into table stops character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/teacher.csv' into table teacher character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/world.csv' into table world character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+
+load data local infile './src/INS_CAT.csv' into table INS_CAT character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/INS_PRS.csv' into table INS_PRS character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/INS_MOD.csv' into table INS_MOD character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/INS_SPR.csv' into table INS_SPR character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/CAM_SMO.csv' into table CAM_SMO character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/INS_RES.csv' into table INS_RES character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/INS_QUE.csv' into table INS_QUE character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+
+load data local infile './src/Shift_type.csv' into table Shift_type character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/Level.csv' into table Level character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/Caller.csv' into table Caller character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/Customer.csv' into table Customer character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/Staff.csv' into table Staff character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/Shift.csv' into table Shift character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/Issue.csv' into table Issue character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+
+load data local infile './src/room_type.csv' into table room_type character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/room.csv' into table room character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/rate.csv' into table rate character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/extra.csv' into table extra character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/guest.csv' into table guest character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/booking.csv' into table booking character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+
+load data local infile './src/CustomerAW.csv' into table CustomerAW character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/CustomerAddress.csv' into table CustomerAddress character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/Address.csv' into table Address character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/SalesOrderHeader.csv' into table SalesOrderHeader character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/ProductCategory.csv' into table ProductCategory character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/Product.csv' into table Product character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/SalesOrderDetail.csv' into table SalesOrderDetail character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/ProductModel.csv' into table ProductModel character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/ProductDescription.csv' into table ProductDescription character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/ProductModelProductDescription.csv' into table ProductModelProductDescription character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+
+load data local infile './src/ut_staff.csv' into table ut_staff character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/ut_student.csv' into table ut_student character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/ut_room.csv' into table ut_room character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/ut_modle.csv' into table ut_modle character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/ut_event.csv' into table ut_event character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/ut_attends.csv' into table ut_attends character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/ut_teaches.csv' into table ut_teaches character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/ut_occurs.csv' into table ut_occurs character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/ut_week.csv' into table ut_week character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+
+load data local infile './src/band.csv' into table band character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/composer.csv' into table composer character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/composition.csv' into table composition character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/concert.csv' into table concert character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/has_composed.csv' into table has_composed character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/musician.csv' into table musician character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/performance.csv' into table performance character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/performer.csv' into table performer character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/place.csv' into table place character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/plays_in.csv' into table plays_in character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/material.csv' into table material character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/dress_order.csv' into table dress_order character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/quantities.csv' into table quantities character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/garment.csv' into table garment character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/jmcust.csv' into table jmcust character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/dressmaker.csv' into table dressmaker character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/construction.csv' into table construction character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/order_line.csv' into table order_line character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+
+load data local infile './src/camera.csv' into table camera character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/keeper.csv' into table keeper character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/image.csv' into table image character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/permit.csv' into table permit character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/vehicle.csv' into table vehicle character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/hadcet.csv' into table hadcet character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
