@@ -67,6 +67,7 @@ load data local infile './src/performance.csv' into table performance character 
 load data local infile './src/performer.csv' into table performer character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
 load data local infile './src/place.csv' into table place character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
 load data local infile './src/plays_in.csv' into table plays_in character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+
 load data local infile './src/material.csv' into table material character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
 load data local infile './src/dress_order.csv' into table dress_order character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
 load data local infile './src/quantities.csv' into table quantities character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;

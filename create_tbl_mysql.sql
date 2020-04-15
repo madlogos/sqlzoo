@@ -256,6 +256,11 @@ CREATE TABLE IF NOT EXISTS `Issue` (
   CONSTRAINT `Issue_ibfk_3` FOREIGN KEY (`Caller_id`) REFERENCES `Caller` (`Caller_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 -- 3. Guest house
+CREATE TABLE IF NOT EXISTS `room_type` (
+  `id` varchar(6) NOT NULL,
+  `description` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 CREATE TABLE IF NOT EXISTS `rate` (
   `room_type` varchar(6) NOT NULL DEFAULT '',
   `occupancy` int(11) NOT NULL DEFAULT 0,
@@ -263,17 +268,12 @@ CREATE TABLE IF NOT EXISTS `rate` (
   PRIMARY KEY (`room_type`,`occupancy`),
   CONSTRAINT `rate_ibfk_1` FOREIGN KEY (`room_type`) REFERENCES `room_type` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-CREATE TABLE IF NOT EXISTS `room_type` (
-  `id` varchar(6) NOT NULL,
-  `description` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 CREATE TABLE IF NOT EXISTS `room` (
   `id` int(11) NOT NULL, 
   `room_type` varchar(6) DEFAULT NULL,
   `max_occupancy` int(11) DEFAULT NULL, 
   PRIMARY KEY (`id`), 
-  KEY `room_typeIDX` (`room_type`), 
+  KEY `room_typeIDX` (`room_type`),
   CONSTRAINT `room_ibfk_1` FOREIGN KEY (`room_type`) REFERENCES `room_type` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 CREATE TABLE IF NOT EXISTS `extra` (
@@ -302,12 +302,13 @@ CREATE TABLE IF NOT EXISTS `booking` (
   PRIMARY KEY (`booking_id`), 
   KEY `room_no_IDX` (`room_no`), 
   KEY `guest_id_IDX` (`guest_id`), 
-  KEY `room_type_requested_IDX` (`room_type_requested`,`occupants`), 
-  CONSTRAINT `booking_ibfk_1` FOREIGN KEY (`room_no`) REFERENCES `room` (`id`), 
-  CONSTRAINT `booking_ibfk_2` FOREIGN KEY (`guest_id`) REFERENCES `guest` (`id`), 
-  CONSTRAINT `booking_ibfk_3` FOREIGN KEY (`room_type_requested`) REFERENCES `room_type` (`id`), 
+  KEY `room_type_requested_IDX` (`room_type_requested`,`occupants`),
+  CONSTRAINT `booking_ibfk_1` FOREIGN KEY (`room_no`) REFERENCES `room` (`id`),
+  CONSTRAINT `booking_ibfk_2` FOREIGN KEY (`guest_id`) REFERENCES `guest` (`id`),
+  CONSTRAINT `booking_ibfk_3` FOREIGN KEY (`room_type_requested`) REFERENCES `room_type` (`id`),
   CONSTRAINT `booking_ibfk_4` FOREIGN KEY (`room_type_requested`,`occupants`) REFERENCES `rate` (`room_type`,`occupancy`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 -- 4. Adventure works
 CREATE TABLE IF NOT EXISTS `CustomerAW` (
   `CustomerID` int(11) NOT NULL, 
@@ -452,7 +453,7 @@ CREATE TABLE IF NOT EXISTS `ut_room` (
   `parent` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `parent` (`parent`),
-  CONSTRAINT `room_ibfk_1` FOREIGN KEY (`parent`) REFERENCES `ut_room` (`id`)
+  CONSTRAINT `room_ibfk_2` FOREIGN KEY (`parent`) REFERENCES `ut_room` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 CREATE TABLE IF NOT EXISTS `ut_modle` (
   `id` varchar(20) NOT NULL,
