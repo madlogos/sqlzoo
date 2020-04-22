@@ -338,7 +338,7 @@ CREATE TABLE IF NOT EXISTS `Address` (
   `AddressLine2` varchar(60) DEFAULT NULL,
   `City` varchar(60) DEFAULT NULL,
   `StateProvince` varchar(60) DEFAULT NULL,
-  `CountyRegion` varchar(50) DEFAULT NULL,
+  `CountryRegion` varchar(50) DEFAULT NULL,
   `PostalCode` varchar(15) DEFAULT NULL,
   PRIMARY KEY (`AddressID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
