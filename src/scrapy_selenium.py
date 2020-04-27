@@ -22,11 +22,11 @@ class TestSavemovie():
 
   def test_copytext(self):
     prefx = ''
-    db = 'material'
-    dblen = 2335
-    header = 'event	week'
+    db = 'covid'
+    dblen = 19200
+    header = 'name whn confirmed deaths recovered'
 
-    self.driver.get("https://sqlzoo.net/wiki/Dressmaker")
+    self.driver.get("https://sqlzoo.net/wiki/Window_LAG")
     self.driver.set_window_size(1009, 768)
     file = './src/' + prefx + db + '.csv'
     if os.path.exists(file):
@@ -35,8 +35,9 @@ class TestSavemovie():
     f = open(file, 'a+', encoding='utf-8')
     f.write(re.sub(r'\s', ',', header))
     i = 0
+    time.sleep(10)
     while i < dblen:
-    # while i < 51:
+    # while i < 51:  
       self.driver.find_element(By.ID, "txtar_1").clear()
       self.driver.find_element(By.ID, "txtar_1").send_keys("SELECT * from %s limit %i, 50" % (db, i))
       self.driver.find_element(By.CSS_SELECTOR, "#frm__1 .submitSQL").click()
@@ -48,6 +49,8 @@ class TestSavemovie():
       ## Web page: Neeps_easy_questions
       # txt = self.driver.find_element(By.CSS_SELECTOR, ".qu:nth-child(4) > .res").text
       ## Web page: Dressmaker
+      # txt = self.driver.find_element(By.CSS_SELECTOR, ".qu:nth-child(7) > .res").text
+      ## Web page: Window_LAG
       txt = self.driver.find_element(By.CSS_SELECTOR, ".qu:nth-child(7) > .res").text
       txt = txt.replace(header, '')
       txt = txt.replace('Result:', '')

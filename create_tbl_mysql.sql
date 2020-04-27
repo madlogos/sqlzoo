@@ -117,6 +117,15 @@ CREATE TABLE IF NOT EXISTS `world` (
  PRIMARY KEY (`name`),
  KEY `world_continent` (`continent`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE `covid` (
+  `name` varchar(50) NOT NULL,
+  `whn` date NOT NULL, 
+  `confirmed` int(11) DEFAULT NULL, 
+  `deaths` int(11) DEFAULT NULL, 
+  `recovered` int(11) DEFAULT NULL, 
+  PRIMARY KEY (`name`,`whn`), 
+  CONSTRAINT `covid_ibfk_1` FOREIGN KEY (`name`) REFERENCES `world` (`name`) 
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 -- Advanced challenges
 -- 1. Module feedback
 CREATE TABLE IF NOT EXISTS `INS_CAT` (

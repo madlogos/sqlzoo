@@ -12,6 +12,7 @@ load data local infile './src/route.csv' into table route character set latin1 f
 load data local infile './src/stops.csv' into table stops character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
 load data local infile './src/teacher.csv' into table teacher character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
 load data local infile './src/world.csv' into table world character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile './src/covid.csv' into table covid character set utf8mb4 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
 
 load data local infile './src/INS_CAT.csv' into table INS_CAT character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
 load data local infile './src/INS_PRS.csv' into table INS_PRS character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;

@@ -131,6 +131,15 @@ CREATE TABLE IF NOT EXISTS world (
 );
 CREATE INDEX world_continent ON world (continent);
 COMMIT;
+CREATE TABLE covid (
+  name varchar(50) NOT NULL,
+  whn date NOT NULL, 
+  confirmed bigint DEFAULT NULL, 
+  deaths bigint DEFAULT NULL,
+  recovered bigint DEFAULT NULL, 
+  PRIMARY KEY (name,whn), 
+  CONSTRAINT covid_ibfk_1 FOREIGN KEY (name) REFERENCES world (name) 
+);
 -- Advanced challenges
 -- 1. Module feedback
 CREATE TABLE IF NOT EXISTS "INS_CAT" (
