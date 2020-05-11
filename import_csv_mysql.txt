@@ -1,86 +1,235 @@
-load data local infile './src/actor.csv' into table actor character set utf8 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/casting.csv' into table casting character set utf8 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/dept.csv' into table dept character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/eteam.csv' into table eteam character set utf8 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/game.csv' into table game character set utf8 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/ge.csv' into table ge character set utf8 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/goal.csv' into table goal character set utf8 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/movie.csv' into table movie character set utf8 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/nobel.csv' into table nobel character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/nss.csv' into table nss character set utf8 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/route.csv' into table route character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/stops.csv' into table stops character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/teacher.csv' into table teacher character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/world.csv' into table world character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/covid.csv' into table covid character set utf8mb4 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/actor.csv' into table actor 
+  character set utf8 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/casting.csv' into table casting 
+  character set utf8 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/dept.csv' into table dept 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/eteam.csv' into table eteam 
+  character set utf8 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/game.csv' into table game 
+  character set utf8 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/ge.csv' into table ge 
+  character set utf8 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/goal.csv' into table goal 
+  character set utf8 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/movie.csv' into table movie 
+  character set utf8 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines
+   (id,@title,@yr,@director,@budget,@gross)
+   set title=NULLif(@title, 'NULL'), yr=NULLif(@yr, 'NULL'), director=NULLif(@director, 'NULL'), 
+   budget=NULLIf(@budget, 'NULL'), gross=NULLif(@gross, 'NULL');
+load data local infile '~/Documents/sqlzoo/src/data/nobel.csv' into table nobel 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/nss.csv' into table nss 
+  character set utf8 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines
+  (ukprn,institution,subject,level,question,A_STRONGLY_DISAGREE,A_DISAGREE,A_NEUTRAL,A_AGREE,A_STRONGLY_AGREE,A_NA,CI_MIN,score,CI_MAX,response,sample,@aggregate)
+  set aggregate=NULLIf(@aggregate, 'NULL');
+load data local infile '~/Documents/sqlzoo/src/data/route.csv' into table route 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/stops.csv' into table stops 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/teacher.csv' into table teacher 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines
+  (id,@dept,name,phone,@mobile)
+  set dept=NULLif(@dept, 'NULL'), mobile=NULLif(@mobile, 'NULL');
+load data local infile '~/Documents/sqlzoo/src/data/world.csv' into table world 
+  character set utf8mb4 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines
+  (name,continent,area,@population,@gdp,capital,tld,flag)
+  set population=NULLif(@population, 'NULL'), gdp=NULLIf(@gdp, 'NULL');
+load data local infile '~/Documents/sqlzoo/src/data/covid.csv' into table covid 
+  character set utf8mb4 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines
+  (name,@whn,confirmed,deaths,recovered)
+  set whn=str_to_date(@whn, '%a, %d %b %Y %T GMT');
 
-load data local infile './src/INS_CAT.csv' into table INS_CAT character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/INS_PRS.csv' into table INS_PRS character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/INS_MOD.csv' into table INS_MOD character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/INS_SPR.csv' into table INS_SPR character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/CAM_SMO.csv' into table CAM_SMO character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/INS_RES.csv' into table INS_RES character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/INS_QUE.csv' into table INS_QUE character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/INS_CAT.csv' into table INS_CAT 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/INS_PRS.csv' into table INS_PRS 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/INS_MOD.csv' into table INS_MOD 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/INS_SPR.csv' into table INS_SPR 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/CAM_SMO.csv' into table CAM_SMO 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/INS_RES.csv' into table INS_RES 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/INS_QUE.csv' into table INS_QUE 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
 
-load data local infile './src/Shift_type.csv' into table Shift_type character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/Level.csv' into table Level character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/Caller.csv' into table Caller character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/Customer.csv' into table Customer character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/Staff.csv' into table Staff character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/Shift.csv' into table Shift character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/Issue.csv' into table Issue character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/Shift_type.csv' into table Shift_type 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/Level.csv' into table Level 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines
+  (Level_code,@Manager,@Operator,@Engineer)
+  set Manager=NULLif(@Manager, 'NULL'), Operator=NULLif(@Operator, 'NULL'), Engineer=NULLif(@Engineer, 'NULL');
+load data local infile '~/Documents/sqlzoo/src/data/Caller.csv' into table Caller 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/Customer.csv' into table Customer 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines
+  (Company_ref,Company_name,Contact_id,Address_1,@Address_2,Town,Postcode,Telephone)
+  set Address_2=NULLif(@Address_2, 'NULL');
+load data local infile '~/Documents/sqlzoo/src/data/Staff.csv' into table Staff 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/Shift.csv' into table Shift 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines
+  (Shift_date,Shift_type,Manager,Operator,Engineer1,@Engineer2)
+  set Engineer2=NULLif(@Engineer2, 'NULL');
+load data local infile '~/Documents/sqlzoo/src/data/Issue.csv' into table Issue 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines
+  (@Call_date,Call_ref,Caller_id,Detail,Taken_by,Assigned_to,Status)
+  set Call_date=str_to_date(@Call_date, '%a, %d %b %Y %T GMT');
 
-load data local infile './src/room_type.csv' into table room_type character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/room.csv' into table room character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/rate.csv' into table rate character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/extra.csv' into table extra character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/guest.csv' into table guest character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/booking.csv' into table booking character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/room_type.csv' into table room_type 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/room.csv' into table room 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/rate.csv' into table rate 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/extra.csv' into table extra 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/guest.csv' into table guest 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/booking.csv' into table booking 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines
+  (booking_id,@booking_date,room_no,guest_id,occupants,room_type_requested,nights,arrival_time)
+  set booking_date=str_to_date(@booking_date, '%a, %d %b %Y %T GMT');
 
-load data local infile './src/CustomerAW.csv' into table CustomerAW character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/CustomerAddress.csv' into table CustomerAddress character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/Address.csv' into table Address character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/SalesOrderHeader.csv' into table SalesOrderHeader character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/ProductCategory.csv' into table ProductCategory character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/Product.csv' into table Product character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/SalesOrderDetail.csv' into table SalesOrderDetail character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/ProductModel.csv' into table ProductModel character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/ProductDescription.csv' into table ProductDescription character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/ProductModelProductDescription.csv' into table ProductModelProductDescription character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/CustomerAW.csv' into table CustomerAW 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines
+  (CustomerID,NameStyle,@Title,FirstName,@MiddleName,LastName,@Suffix,CompanyName,SalesPerson,EmailAddress,Phone,PasswordHash,PasswordSalt)
+  set Title=NULLif(@Title, 'NULL'), MiddleName=NULLif(@MiddleName, 'NULL'), Suffix=NULLif(@Suffix, 'NULL');
+load data local infile '~/Documents/sqlzoo/src/data/CustomerAddress.csv' into table CustomerAddress 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/Address.csv' into table Address 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines
+  (AddressID,AddressLine1,@AddressLine2,City,StateProvince,CountryRegion,PostalCode)
+  set AddressLine2=NULLif(@AddressLine2, 'NULL');
+load data local infile '~/Documents/sqlzoo/src/data/SalesOrderHeader.csv' into table SalesOrderHeader 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines
+  (SalesOrderID,RevisionNumber,@OrderDate,@DueDate,@ShipDate,Status,OnlineOrderFlag,SalessOrderNumber,PurchaseOrderNumber,AccountNumber,CustomerID,ShipToAddressID,BillToAddressID,ShipMethod,@CreditCardApprovalCode,SubTotal,TaxAmt,Freight,Commnt)
+  set OrderDate=str_to_date(@OrderDate, '%a, %d %b %Y %T GMT'), DueDate=str_to_date(@DueDate, '%a, %d %b %Y %T GMT'),
+   ShipDate=str_to_date(@ShipDate, '%a, %d %b %Y %T GMT'), CreditCardApprovalCode=NULLif(@CreditCardApprovalCode, 'NULL');
+load data local infile '~/Documents/sqlzoo/src/data/ProductCategory.csv' into table ProductCategory 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines
+  (ProductCategoryID,@ParentProductCategoryID,Name)
+  set ParentProductCategoryID=NULLif(@ParentProductCategoryID, 'NULL');
+load data local infile '~/Documents/sqlzoo/src/data/Product.csv' into table Product 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines
+  (ProductID,Name,ProductNumber,@Color,StandardCost,ListPrice,@Sze,@Weight,ProductCategoryID,ProductModelID,@SellStartDate,@SellEndDate,@DiscontinuedDate,@ThumbnailPhotoFileName)
+  set Color=NULLif(@Color, 'NULL'), Sze=NULLif(@Sze, 'NULL'), Weight=NULLif(@Weight, 'NULL'),
+   SellStartDate=str_to_date(@SellStartDate, '%a, %d %b %Y %T GMT'), SellEndDate=str_to_date(@SellEndDate, '%a, %d %b %Y %T GMT'),
+   DiscontinuedDate=str_to_date(NULLIf(@DiscontinuedDate, 'NULL'), '%a, %d %b %Y %T GMT'), 
+   ThumbnailPhotoFileName=NULLif(@ThumbnailPhotoFileName, 'NULL');
+load data local infile '~/Documents/sqlzoo/src/data/SalesOrderDetail.csv' into table SalesOrderDetail 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/ProductModel.csv' into table ProductModel 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines
+  (ProductModelID,Name,@CatalogDescription)
+  set CatalogDescription=NULLif(@CatalogDescription, 'NULL');
+load data local infile '~/Documents/sqlzoo/src/data/ProductDescription.csv' into table ProductDescription 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines
+  (ProductDescriptionID,Description);
+load data local infile '~/Documents/sqlzoo/src/data/ProductModelProductDescription.csv' into table ProductModelProductDescription 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
 
-load data local infile './src/ut_staff.csv' into table ut_staff character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/ut_student.csv' into table ut_student character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/ut_room.csv' into table ut_room character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/ut_modle.csv' into table ut_modle character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/ut_event.csv' into table ut_event character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/ut_attends.csv' into table ut_attends character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/ut_teaches.csv' into table ut_teaches character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/ut_occurs.csv' into table ut_occurs character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/ut_week.csv' into table ut_week character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/ut_staff.csv' into table ut_staff 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/ut_student.csv' into table ut_student 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines
+  (id,name,sze,@parent)
+  set parent=NULLif(@parent, 'NULL');
+load data local infile '~/Documents/sqlzoo/src/data/ut_room.csv' into table ut_room 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines
+  (id,name,capacity,@parent)
+  set parent=NULLif(@parent, 'NULL');
+load data local infile '~/Documents/sqlzoo/src/data/ut_modle.csv' into table ut_modle 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines
+  (id,@name)
+  set name=NULLif(@name, 'NULL');
+load data local infile '~/Documents/sqlzoo/src/data/ut_event.csv' into table ut_event 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines
+  (id,modle,kind,dow,tod,duration,@room)
+  set room=NULLif(@room, 'NULL');
+load data local infile '~/Documents/sqlzoo/src/data/ut_attends.csv' into table ut_attends 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/ut_teaches.csv' into table ut_teaches 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/ut_occurs.csv' into table ut_occurs 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/ut_week.csv' into table ut_week 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines
+  (id,@wkstart)
+  set wkstart=str_to_date(@wkstart, '%a, %d %b %Y %T GMT');
 
-load data local infile './src/band.csv' into table band character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/composer.csv' into table composer character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/composition.csv' into table composition character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/concert.csv' into table concert character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/has_composed.csv' into table has_composed character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/musician.csv' into table musician character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/performance.csv' into table performance character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/performer.csv' into table performer character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/place.csv' into table place character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/plays_in.csv' into table plays_in character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/band.csv' into table band 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines
+  (band_no,band_name,band_home,band_type,@b_date,band_contact)
+  set b_date=str_to_date(NULLif(@b_date, 'NULL'), '%Y-%m-%d');
+load data local infile '~/Documents/sqlzoo/src/data/composer.csv' into table composer 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/composition.csv' into table composition 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines
+  (c_no,@comp_date,c_title,c_in)
+  set comp_date=str_to_date(NULLif(@comp_date, 'NULL'), '%Y-%m-%d');
+load data local infile '~/Documents/sqlzoo/src/data/concert.csv' into table concert 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines
+  (concert_no,concert_venue,concert_in,@con_date,concert_orgniser)
+  set con_date=str_to_date(NULLif(@con_date, 'NULL'), '%Y-%m-%d');
+load data local infile '~/Documents/sqlzoo/src/data/has_composed.csv' into table has_composed 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/musician.csv' into table musician 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines
+  (m_no,m_name,born,@died,born_in,living_in)
+  set died=str_to_date(NULLif(@died, 'NULL'), '%Y-%m-%d');
+load data local infile '~/Documents/sqlzoo/src/data/performance.csv' into table performance 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/performer.csv' into table performer 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/place.csv' into table place 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/plays_in.csv' into table plays_in 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
 
-load data local infile './src/material.csv' into table material character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/dress_order.csv' into table dress_order character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/quantities.csv' into table quantities character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/garment.csv' into table garment character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/jmcust.csv' into table jmcust character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/dressmaker.csv' into table dressmaker character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/construction.csv' into table construction character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/order_line.csv' into table order_line character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/material.csv' into table material 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/dress_order.csv' into table dress_order 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines
+  (order_no,cust_no,@order_date,completed)
+  set order_date=str_to_date(@order_date, '%a, %d %b %Y %T GMT');
+load data local infile '~/Documents/sqlzoo/src/data/quantities.csv' into table quantities 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/garment.csv' into table garment 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines
+  (style_no,description,labour_cost,@notions)
+  set notions=NULLif(@notions, 'NULL');
+load data local infile '~/Documents/sqlzoo/src/data/jmcust.csv' into table jmcust 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/dressmaker.csv' into table dressmaker 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/construction.csv' into table construction 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines
+  (maker,order_ref,line_ref,@start_date,@finish_date)
+  set start_date=str_to_date(NULLif(@start_date, 'NULL'), '%a, %d %b %Y %T GMT'),
+  finish_date=str_to_date(NULLif(@finish_date, 'NULL'), '%a, %d %b %Y %T GMT');
+load data local infile '~/Documents/sqlzoo/src/data/order_line.csv' into table order_line 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
 
-load data local infile './src/camera.csv' into table camera character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/keeper.csv' into table keeper character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/image.csv' into table image character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/permit.csv' into table permit character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/vehicle.csv' into table vehicle character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
-load data local infile './src/hadcet.csv' into table hadcet character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/camera.csv' into table camera 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines
+  (id,@perim)
+  set perim=NULLif(@perim, 'NULL');
+load data local infile '~/Documents/sqlzoo/src/data/keeper.csv' into table keeper 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+load data local infile '~/Documents/sqlzoo/src/data/image.csv' into table image 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines
+  (camera,@whn,reg)
+  set whn=str_to_date(@whn, '%a, %d %b %Y %T GMT');
+load data local infile '~/Documents/sqlzoo/src/data/permit.csv' into table permit 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines
+  (reg,@sDate,chargeType)
+  set sDate=str_to_date(@sDate, '%a, %d %b %Y %T GMT');
+load data local infile '~/Documents/sqlzoo/src/data/vehicle.csv' into table vehicle 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines
+  (id,@keeper)
+  set keeper=NULLif(@keeper, 'NULL');
+load data local infile '~/Documents/sqlzoo/src/data/hadcet.csv' into table hadcet 
+  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;

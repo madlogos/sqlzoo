@@ -1,12 +1,80 @@
 # SQLZOO试题的R实现
 
-## 说明
+## 步骤
 
-Title | Link
-------|--------
-00  how to start  | [GitHub](https://github.com/madlogos/sqlzoo/blob/master/R/00%20%20how%20to%20start.ipynb)  [Gitee](https://gitee.com/madlogos/sqlzoo/blob/master/R/00%20%20how%20to%20start.ipynb)
+1. 在R中安装必要的包，安装方法：
+    ```r
+    install.packages(c('repr', 'IRdisplay', 'evaluate', 'crayon', 'pbdZMQ', 'devtools', 'uuid', 'digest', 'IRkernel))
+    ```
+1. 安装R内核
+    - 当前用户
+    ```r
+    IRkernel::installspec()
+    ```
+    - 系统所有用户
+    ```r
+    IRkernel::installspec(user=FALSE)
+    ```
+1. 启动数据库`localhost/sqlzoo`（数据需提前导入）。
+1. 通过`DBI`连接sqlzoo数据库。
 
-## 基础题
+本案例使用PostgreSQL，也可以使用MySQL/MariaDB。
+
+```r
+library(tidyverse)
+library(DBI)
+library(getPass)
+drv <- switch(Sys.info()['sysname'],
+             Windows="PostgreSQL Unicode(x64)",
+             Darwin="/usr/local/lib/psqlodbcw.so",
+             Linux="PostgreSQL")
+con <- dbConnect(
+  odbc::odbc(),
+  driver = drv,
+  Server = "localhost",
+  Database = "sqlzoo",
+  UID = "postgres",
+  PWD = getPass("Password?"),
+  Port = 5432
+)
+```
+
+连接上以后还可以做一些设置，比如将长度显示行数的上限为10：
+
+```r
+options(repr.matrix.max.rows=10)
+```
+
+## 举例
+
+接下来就可以用`dplyr`操作数据库了。
+
+```r
+library(tidyverse)
+world <- dbReadTable(con, "world")
+world
+```
+
+name | continent | area | population | gdp | capital | tld | flag
+--------|---------------|-------|----------------|-------|---------|-----|------------
+Afghanistan | Asia | 652230.0 | 32225560.0 | 21992000000.0 | Kabul | .af | //upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Afghanistan.svg
+Albania | Europe | 28748.0 | 2845955.0 | 13039000000.0 | Tirana | .al | //upload.wikimedia.org/wikipedia/commons/3/36/Flag_of_Albania.svg
+Algeria | Africa | 2381741.0 | 43000000.0 | 167555000000.0 | Algiers | .dz | //upload.wikimedia.org/wikipedia/commons/7/77/Flag_of_Algeria.svg
+Andorra | Europe | 468.0 | 77543.0 | 3278000000.0 | Andorra la Vella | .ad | //upload.wikimedia.org/wikipedia/commons/1/19/Flag_of_Andorra.svg
+Angola | Africa | 1246700.0 | 31127674.0 | 126505000000.0 | Luanda | .ao | //upload.wikimedia.org/wikipedia/commons/9/9d/Flag_of_Angola.svg
+Antigua and Barbuda | Caribbean | 442.0 | 96453.0 | 1248000000.0 | St. John's | .ag | //upload.wikimedia.org/wikipedia/commons/8/89/Flag_of_Antigua_and_Barbuda.svg
+Argentina | South America | 2780400.0 | 44938712.0 | 637486000000.0 | Buenos Aires | .ar | //upload.wikimedia.org/wikipedia/commons/1/1a/Flag_of_Argentina.svg
+Armenia | Eurasia | 29743.0 | 2957500.0 | 11536000000.0 | Yerevan | .am | //upload.wikimedia.org/wikipedia/commons/2/2f/Flag_of_Armenia.svg
+Australia | Oceania | 7692024.0 | 25690023.0 | 1408675000000.0 | Canberra | .au | //upload.wikimedia.org/wikipedia/commons/8/88/Flag_of_Australia_%28converted%29.svg
+Austria | Europe | 83871.0 | 8902600.0 | 416835000000.0 | Vienna | .at | //upload.wikimedia.org/wikipedia/commons/4/41/Flag_of_Austria.svg
+
+> 195 rows, truncated to displaylimit of 10
+
+`world`表一共195行，但由于全局设置了`options(repr.matrix.max.rows)`，默认只显示了10行（前5+后5）。
+
+## 目录
+
+### 基础题
 
 Title | Link
 ------|--------
@@ -24,7 +92,7 @@ Title | Link
 09 Self join | [GitHub](https://github.com/madlogos/sqlzoo/blob/master/R/09%20Self%20join.ipynb)  [Gitee](https://gitee.com/madlogos/sqlzoo/blob/master/R/09%20Self%20join.ipynb)
 09+ COVID-19 | [GitHub](https://github.com/madlogos/sqlzoo/blob/master/R/09%2B%20COVID%2019.ipynb)  [Gitee](https://gitee.com/madlogos/sqlzoo/blob/master/R/09%2B%20COVID%2019.ipynb)
 
-## 提高题
+### 提高题
 
 Title | Link
 ------|--------
@@ -54,7 +122,7 @@ Title | Link
 18-2 Congestion - Medium | [GitHub](https://github.com/madlogos/sqlzoo/blob/master/R/18-2%20Congestion%20-%20Medium.ipynb)  [Gitee](https://gitee.com/madlogos/sqlzoo/blob/master/R/18-2%20Congestion%20-%20Medium.ipynb)
 18-3 Congestion - Hard | [GitHub](https://github.com/madlogos/sqlzoo/blob/master/R/18-3%20Congestion%20-%20Hard.ipynb)  [Gitee](https://gitee.com/madlogos/sqlzoo/blob/master/R/18-3%20Congestion%20-%20Hard.ipynb)
 
-## 挑战
+### 挑战
 
 Title | Link
 ------|--------

@@ -1,0 +1,9 @@
+#! /bin/bash
+read -p "input username:" usernm
+read -p "input password:" pwd
+tbls=("actor" "Address" "band" "booking" "Caller" "CAM_SMO" "camera" "casting" "composer" "composition" "concert" "construction" "covid" "Customer" "CustomerAddress" "CustomerAW" "dept" "dress_order" "dressmaker" "eteam" "extra" "game" "garment" "ge" "goal" "guest" "hadcet" "has_composed" "image" "INS_CAT" "INS_MOD" "INS_PRS" "INS_QUE" "INS_RES" "INS_SPR" "Issue" "jmcust" "keeper" "Level" "material" "movie" "musician" "nobel" "nss" "order_line" "performance" "performer" "permit" "place" "plays_in" "Product" "ProductCategory" "ProductDescription" "ProductModel" "ProductModelProductDescription" "quantities" "rate" "room_type" "room" "route" "SalesOrderDetail" "SalesOrderHeader" "Shift_type" "Shift" "Staff" "stops" "teacher" "ut_attends" "ut_event" "ut_modle" "ut_occurs" "ut_room" "ut_staff" "ut_student" "ut_teaches" "ut_week" "vehicle" "world")
+for tbl in ${tbls[*]}
+do
+sqoop import --connect jdbc:mysql://172.17.0.1:3306/sqlzoo --username ${usernm} -password ${pwd} --table ${tbl} --null-string '\\N' --null-non-string '\\N' --fields-terminated-by '\t' --delete-target-dir --num-mappers 1 --hive-import --hive-overwrite --hive-database sqlzoo --hive-table ${tbl}
+echo "${tbl} imported"
+done

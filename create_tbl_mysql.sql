@@ -116,16 +116,17 @@ CREATE TABLE IF NOT EXISTS `world` (
  `flag` varchar(255) DEFAULT NULL,
  PRIMARY KEY (`name`),
  KEY `world_continent` (`continent`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `covid` (
   `name` varchar(50) NOT NULL,
   `whn` date NOT NULL, 
   `confirmed` int(11) DEFAULT NULL, 
   `deaths` int(11) DEFAULT NULL, 
   `recovered` int(11) DEFAULT NULL, 
-  PRIMARY KEY (`name`,`whn`), 
-  CONSTRAINT `covid_ibfk_1` FOREIGN KEY (`name`) REFERENCES `world` (`name`) 
+  PRIMARY KEY (`name`,`whn`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+ALTER TABLE `covid`
+  ADD CONSTRAINT `covid_ibfk_1` FOREIGN KEY (`name`) REFERENCES `world` (`name`);
 -- Advanced challenges
 -- 1. Module feedback
 CREATE TABLE IF NOT EXISTS `INS_CAT` (
@@ -317,7 +318,6 @@ CREATE TABLE IF NOT EXISTS `booking` (
   CONSTRAINT `booking_ibfk_3` FOREIGN KEY (`room_type_requested`) REFERENCES `room_type` (`id`),
   CONSTRAINT `booking_ibfk_4` FOREIGN KEY (`room_type_requested`,`occupants`) REFERENCES `rate` (`room_type`,`occupancy`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
 -- 4. Adventure works
 CREATE TABLE IF NOT EXISTS `CustomerAW` (
   `CustomerID` int(11) NOT NULL, 
