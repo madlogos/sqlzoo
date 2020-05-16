@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS `nobel` (
  `yr` int(11) DEFAULT NULL,
  `subject` varchar(15) DEFAULT NULL,
  `winner` varchar(50) DEFAULT NULL 
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE IF NOT EXISTS `nss` (
  `ukprn` varchar(8) NOT NULL,
  `institution` varchar(100) DEFAULT NULL,

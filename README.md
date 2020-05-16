@@ -8,6 +8,8 @@
 
 `git clone`本repo (<https://github.com/madlogos/sqlzoo.git>) 到本地，目录结构如下：
 
+> 本repo在码云上有同步镜像，国内网速较差的话可换用[gitee](https://gitee.com/madlogos/sqlzoo.git)。
+
 ```txt
 --|
   |--[+] Hive
@@ -33,8 +35,6 @@
   - 创建本地数据库后，可直接运行根目录的`create_tbl_xxx.sql`DDL脚本（详见[后文](#创建RDBMS数据表)），创建分析中涉及到的表。
   - 创建数据表后，可逐条运行根目录下`import_csv_xxx.txt`文件中的命令（详见[后文](#csv数据导入RDBMS)），将src目录中解压出来的.csv原始数据导入数据库。
   -  安装并配置好Hadoop/Hive/Sqoop环境后，将`import_sqoop_sh.txt`后缀重命名为.sh并执行，从而把前述步骤中通过`import_csv_mysql.txt`导入MySQL的数据导进Hive（详见[后文](#RDBMS数据导入Hive)）。
-
-> 本repo在Gitee上有同步镜像，国内网速较差的话可换用[gitee](https://gitee.com/madlogos/sqlzoo.git)。
 
 ## 环境搭建
 
@@ -92,6 +92,89 @@ CREATE TABLE `world` (
 
 本repo根目录的src文件夹内有一个data.7z文件。用支持7z算法的工具（如Windows下的7z）解压后即得到所有.csv格式的原始数据（共78个）。
 
+| TABLE_NAME                     | TABLE_ROWS |
+|--------------------------------|-----------:
+|
+| Address                        |        450 |
+| CAM_SMO                        |        354 |
+| Caller                         |        148 |
+| Customer                       |         50 |
+| CustomerAW                     |        440 |
+| CustomerAddress                |        450 |
+| INS_CAT                        |          4 |
+| INS_MOD                        |         19 |
+| INS_PRS                        |         18 |
+| INS_QUE                        |         19 |
+| INS_RES                        |       5988 |
+| INS_SPR                        |        119 |
+| Issue                          |        496 |
+| Level                          |          6 |
+| Product                        |        295 |
+| ProductCategory                |         41 |
+| ProductDescription             |        762 |
+| ProductModel                   |        128 |
+| ProductModelProductDescription |        762 |
+| SalesOrderDetail               |        500 |
+| SalesOrderHeader               |         32 |
+| Shift                          |          2 |
+| Shift_type                     |          2 |
+| Staff                          |         24 |
+| actor                          |      47247 |
+| band                           |          9 |
+| booking                        |        347 |
+| camera                         |         19 |
+| casting                        |     118922 |
+| composer                       |         12 |
+| composition                    |         21 |
+| concert                        |          8 |
+| construction                   |         30 |
+| covid                          |      16149 |
+| dept                           |          3 |
+| dress_order                    |         12 |
+| dressmaker                     |          7 |
+| eteam                          |         16 |
+| extra                          |        207 |
+| game                           |         31 |
+| garment                        |          6 |
+| ge                             |       9945 |
+| goal                           |         76 |
+| guest                          |        648 |
+| hadcet                         |       7626 |
+| has_composed                   |         23 |
+| image                          |         49 |
+| jmcust                         |          8 |
+| keeper                         |          6 |
+| material                       |         14 |
+| movie                          |      11726 |
+| musician                       |         22 |
+| nobel                          |        895 |
+| nss                            |      50689 |
+| order_line                     |         31 |
+| performance                    |         20 |
+| performer                      |         29 |
+| permit                         |         47 |
+| place                          |          9 |
+| plays_in                       |         31 |
+| quantities                     |         36 |
+| rate                           |          8 |
+| room                           |         30 |
+| room_type                      |          4 |
+| route                          |       1174 |
+| stops                          |        246 |
+| teacher                        |          6 |
+| ut_attends                     |        659 |
+| ut_event                       |        201 |
+| ut_modle                       |        106 |
+| ut_occurs                      |       4669 |
+| ut_room                        |         30 |
+| ut_staff                       |         73 |
+| ut_student                     |         92 |
+| ut_teaches                     |        483 |
+| ut_week                        |         15 |
+| vehicle                        |         36 |
+| world                          |        195 |
+
+
 根目录下有`import_csv_mysql.txt`和`import_csv_postgresql.txt`两个文件，根据实际数据库环境选择正确的版本。这两个文件包含了导入csv数据的命令，需要在数据库命令行界面中逐条执行。如在PostgreSQL中执行
 
 ```sql
@@ -130,30 +213,33 @@ load data local infile '~/Documents/sqlzoo/src/data/teacher.csv' into table teac
   docker pull  cloudera/quickstart:lastest
   ```
 
-2. 启动CDH镜像，之后可通过Kitematic图形化管理
+1. 启动CDH镜像，之后可通过Kitematic图形化管理
 
   ```bash
-  docker run --privileged=true --hostname=quickstart.cloudera -p 8020:8020 -p 7180:7180 -p 21050:21050 -p 10000:10000 -p 50070:50070 -p 50075:50075 -p 50010:50010 -p 50020:50020 -p 8888:8888 -t -i -d <cdh docker image id> /usr/bin/docker-quickstart
+  docker run --privileged=true --hostname=quickstart.cloudera \
+  -p 8020:8020 -p 7180:7180 -p 21050:21050 -p 10000:10000 -p 50070:50070 \
+  -p 50075:50075 -p 50010:50010 -p 50020:50020 -p 8888:8888 \
+  -t -i -d <cdh docker image id> /usr/bin/docker-quickstart
   ```
 
-3. 进入CDH镜像，启动cloudera-manager
+1. 进入CDH镜像，启动cloudera-manager
 
   ```bash
   docker exec -t -i <cdh docker image id> /bin/bash
   [root@quickstart /]# /home/cloudera/cloudera-manager --force --express
   ```
 
-4. 允许Docker镜像访问宿主MySQL数据库（在宿主机命令行界面操作）
+1. 允许Docker镜像访问宿主MySQL数据库（在宿主机命令行界面操作）
 
   1. 找到MySQL数据库配置文件 (如Ubuntu中，是/etc/mysql/mysql.conf.d/mysqld.cnf）编辑，将bind 127.0.0.1这句注释掉。
   2. root进入数据库（本repo以MySQL为例），执行授权命令
 
-    ```sql
-    grant all privileges on *.* to 'root'@'172.17.0.2' identified by '<pwd>' with grant option;
-    flush privileges;
-    ```
+   ```sql
+   grant all privileges on *.* to 'root'@'172.17.0.2' identified by '<pwd>' with grant option;
+   flush privileges;
+   ```
 
-    > pwd为数据库密码。本案例中，宿主机的虚拟IP为172.17.0.1，镜像的虚拟IP为127.17.0.2，故只给cdh镜像开放访问权限。ip可通过`ifconfig`查看。
+   > pwd为数据库密码。本案例中，宿主机的虚拟IP为172.17.0.1，镜像的虚拟IP为127.17.0.2，故只给cdh镜像开放访问权限。ip可通过`ifconfig`查看。
 
   3. 退出数据库，重启MySQL服务
 
@@ -162,7 +248,7 @@ load data local infile '~/Documents/sqlzoo/src/data/teacher.csv' into table teac
   /etc/init.d/mysql start
   ```
 
-5. 创建.sh脚本，执行sqoop导入。
+1. 创建.sh脚本，执行sqoop导入。
   在镜像命令行界面内创建一个.sh脚本，将`import_sqoop_sh.txt`中的内容复制进去，执行，即可将MySQL sqlzoo库中的78张表都导入CDH镜像的Hive中。该脚本循环遍历`tbls`变量病执行`sqoop import`指令:
 
   ```bash
@@ -172,7 +258,11 @@ load data local infile '~/Documents/sqlzoo/src/data/teacher.csv' into table teac
   tbls=("table 1", "table 2", ...)
   for tbl in ${tbls[*]}
   do
-  sqoop import --connect jdbc:mysql://172.17.0.1:3306/sqlzoo --username ${usernm} -password ${pwd} --table ${tbl} --null-string '\\N' --null-non-string '\\N' --fields-terminated-by '\t' --delete-target-dir --num-mappers 1 --hive-import --hive-overwrite --hive-database sqlzoo --hive-table ${tbl}
+  sqoop import --connect jdbc:mysql://172.17.0.1:3306/sqlzoo \
+  --username ${usernm} -password ${pwd} --table ${tbl} \
+  --null-string '\\N' --null-non-string '\\N' --fields-terminated-by '\t' \
+  --delete-target-dir --num-mappers 1 --hive-import --hive-overwrite \
+  --hive-database sqlzoo --hive-table ${tbl}
   echo "${tbl} imported"
   done
   ```

@@ -18,7 +18,7 @@ load data local infile '~/Documents/sqlzoo/src/data/movie.csv' into table movie
    set title=NULLif(@title, 'NULL'), yr=NULLif(@yr, 'NULL'), director=NULLif(@director, 'NULL'), 
    budget=NULLIf(@budget, 'NULL'), gross=NULLif(@gross, 'NULL');
 load data local infile '~/Documents/sqlzoo/src/data/nobel.csv' into table nobel 
-  character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
+  character set utf8 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
 load data local infile '~/Documents/sqlzoo/src/data/nss.csv' into table nss 
   character set utf8 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines
   (ukprn,institution,subject,level,question,A_STRONGLY_DISAGREE,A_DISAGREE,A_NEUTRAL,A_AGREE,A_STRONGLY_AGREE,A_NA,CI_MIN,score,CI_MAX,response,sample,@aggregate)
@@ -71,8 +71,8 @@ load data local infile '~/Documents/sqlzoo/src/data/Staff.csv' into table Staff
   character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines;
 load data local infile '~/Documents/sqlzoo/src/data/Shift.csv' into table Shift 
   character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines
-  (Shift_date,Shift_type,Manager,Operator,Engineer1,@Engineer2)
-  set Engineer2=NULLif(@Engineer2, 'NULL');
+  (@Shift_date,Shift_type,Manager,Operator,Engineer1,@Engineer2)
+  set Shift_date=str_to_date(@Shift_date, '%a, %d %b %Y %T GMT'), Engineer2=NULLif(@Engineer2, 'NULL');
 load data local infile '~/Documents/sqlzoo/src/data/Issue.csv' into table Issue 
   character set latin1 fields terminated by ',' optionally enclosed by '"' escaped by '"' lines terminated by '\n' ignore 1 lines
   (@Call_date,Call_ref,Caller_id,Detail,Taken_by,Assigned_to,Status)
