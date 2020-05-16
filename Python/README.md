@@ -1,14 +1,28 @@
-# SQLZOO试题的Python (`Pandas`) 实现
+# SQLZOO试题的Python (`Pandas`) 实现 | Python (`pandas`) Implementation of SQLZOO Solutions
 
-## 步骤
+## 步骤 Steps
 
 1. 需要用到[`pandas`](https://pandas.pydata.org/)、[`SQLAlchemy`](https://www.sqlalchemy.org)包。此外，本实验采用PostgreSQL，需要[`psycopg2`](https://pypi.org/project/psycopg2/)包。在Anaconda环境下安装即可：
+
     ```bash
     conda install pandas sqlalchemy psycopg2
     ```
+
 1. 启动数据库`localhost/sqlzoo`。
 1. 通过`sqlalchemy`形式的DB URI连接sqlzoo数据库。
-> macOS Mojave不能安装`mysql-python`，只能装`pymysql`。因此，如果用MySQL的话，URI要写成`mysql+pymysq://...`。
+
+---
+
+1. [`pandas`](https://pandas.pydata.org/), [`SQLAlchemy`](https://www.sqlalchemy.org) are required. Also, PostgreSQL is applied in this case, so [`psycopg2`](https://pypi.org/project/psycopg2/) is also required. You can use conda/pip to install them.
+
+    ```bash
+    conda install pandas sqlalchemy psycopg2
+    ```
+
+1. Boot the database `localhost/sqlzoo`
+1. Connect to the sqlzoo database by `sqlalchemy` compatible DB URI
+
+> macOS Mojave不能安装`mysql-python`，只能装`pymysql`。因此，如果用MySQL的话，URI要写成`mysql+pymysq://...`。 macOS Majave cannot install `mysql-python` currently. Install `pymysql` insstead and write the URI in the form of `mysql+pymysq://...`.
 
 ```python
 import getpass
@@ -20,13 +34,13 @@ engine = create_engine(
     'postgresql+psycopg2://postgres:%s@localhost/sqlzoo' % (pwd))
 ```
 
-可以针对`pandas`做一些设置，比如将长度显示行数的上限为10：
+可以针对`pandas`做一些设置，比如将长度显示行数的上限为10。 Do some configuration after connection, e.g., set the display upper limit of rows = 10.
 
 ```sql
 pd.set_option('display.max_rows', 10)
 ```
 
-## 举例
+## 举例 Example
 
 ```python
 pd.read_sql_table('world', engine)
@@ -47,11 +61,11 @@ Austria | Europe | 83871.0 | 8902600.0 | 416835000000.0 | Vienna | .at | //uploa
 
 > 195 rows, truncated to displaylimit of 10
 
-`world`表一共195行，但由于`pandas`全局设置了`display.max_rows`，默认只显示了前10行。
+`world`表一共195行，但由于`pandas`全局设置了`display.max_rows`，默认只显示了前10行。 There are a total of 195 rows in `world`. But only 10 rows are displayed due to the global setting `SqlMagic.displaylimit`.
 
-## 目录
+## 目录 Table of Contents
 
-### 基础题
+### 基础题 Fundermentals
 
 Title | Link
 ------|--------
@@ -69,7 +83,7 @@ Title | Link
 09 Self join | [GitHub](https://github.com/madlogos/sqlzoo/blob/master/Python/09%20Self%20join.ipynb)  [Gitee](https://gitee.com/madlogos/sqlzoo/blob/master/Python/09%20Self%20join.ipynb)
 09+ COVID-19 | [GitHub](https://github.com/madlogos/sqlzoo/blob/master/Python/09%2B%20COVID%2019.ipynb)  [Gitee](https://gitee.com/madlogos/sqlzoo/blob/master/Python/09%2B%20COVID%2019.ipynb)
 
-### 提高题
+### 提高题 Advanced
 
 Title | Link
 ------|--------
@@ -99,7 +113,7 @@ Title | Link
 18-2 Congestion - Medium | [GitHub](https://github.com/madlogos/sqlzoo/blob/master/Python/18-2%20Congestion%20-%20Medium.ipynb)  [Gitee](https://gitee.com/madlogos/sqlzoo/blob/master/Python/18-2%20Congestion%20-%20Medium.ipynb)
 18-3 Congestion - Hard | [GitHub](https://github.com/madlogos/sqlzoo/blob/master/Python/18-3%20Congestion%20-%20Hard.ipynb)  [Gitee](https://gitee.com/madlogos/sqlzoo/blob/master/Python/18-3%20Congestion%20-%20Hard.ipynb)
 
-### 挑战
+### 挑战 Challege
 
 Title | Link
 ------|--------

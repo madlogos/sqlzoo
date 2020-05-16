@@ -1,17 +1,30 @@
-# SQLZOO试题的PostgreSQL实现
+# SQLZOO试题的PostgreSQL实现 | PostgreSQL Implementation of SQLZOO Solutions
 
-## 步骤
+## 步骤 Steps
 
 1. 需要用到[`ipython-sql`](https://github.com/catherinedevlin/ipython-sql/)包，安装方法：
+
     ```bash
     pip install ipython-sql
     ```
+
 1. 启动数据库`localhost/sqlzoo`（数据需提前导入）。
 1. 通过`sqlalchemy`形式的DB URI连接sqlzoo数据库。
 
-本案例使用PostgreSQL，也可以使用MySQL/MariaDB。
+---
 
-> macOS Mojave无法安装`mysql-python`，只能装`pymysql`。因此如使用MySQL的话，URI要写成`mysql+pymysq://...`的形式。
+1. [`ipython-sql`](https://github.com/catherinedevlin/ipython-sql/) is required. Installation:
+
+    ```bash
+    pip install ipython-sql
+    ```
+
+1. Boot the database `localhost/sqlzoo` (data should be imported before hand).
+1. Connect to the sqlzoo database by `sqlalchemy` compatible DB URI.
+
+本案例使用PostgreSQL，也可以使用MySQL/MariaDB。 In this case, PostegreSQL is applied.
+
+> macOS Mojave无法安装`mysql-python`，只能装`pymysql`。因此如使用MySQL的话，URI要写成`mysql+pymysq://...`的形式。 macOS Majave cannot install `mysql-python` currently. Install `pymysql` insstead and write the URI in the form of `mysql+pymysq://...`.
 
 ```sql
 import getpass
@@ -21,15 +34,15 @@ pwd = getpass.getpass()
 %sql postgresql://postgres:$pwd@localhost/sqlzoo
 ```
 
-连接上以后还可以做一些设置，比如将长度显示行数的上限为10：
+连接上以后还可以做一些设置，比如将长度显示行数的上限为10. Do some configuration after connection, e.g., set the display upper limit of rows = 10.
 
 ```sql
 %config SqlMagic.displaylimit = 10
 ```
 
-记得每次运行SQL语句时，前面都要加`%%sql magic`符。
+记得每次运行SQL语句时，前面都要加`%%sql` magic符。 Remember to add `%%sql` magic before running SQL syntax.
 
-## 举例
+## 举例 Exmaple
 
 ```sql
 %%sql
@@ -51,11 +64,11 @@ Austria | Europe | 83871.0 | 8902600.0 | 416835000000.0 | Vienna | .at | //uploa
 
 > 195 rows, truncated to displaylimit of 10
 
-`world`表一共195行，但由于全局设置了`SqlMagic.displaylimit`，默认只显示了前10行。
+`world`表一共195行，但由于全局设置了`SqlMagic.displaylimit`，默认只显示了前10行。 There are a total of 195 rows in `world`. But only 10 rows are displayed due to the global setting `SqlMagic.displaylimit`.
 
-## 目录
+## 目录 Table of Contents
 
-### 基础题
+### 基础题 Fundermentals
 
 Title | Link
 ------|--------
@@ -73,7 +86,7 @@ Title | Link
 09 Self join | [GitHub](https://github.com/madlogos/sqlzoo/blob/master/PostgreSQL/09%20Self%20join.ipynb)  [Gitee](https://gitee.com/madlogos/sqlzoo/blob/master/PostgreSQL/09%20Self%20join.ipynb)
 09+ COVID-19 | [GitHub](https://github.com/madlogos/sqlzoo/blob/master/PostgreSQL/09%2B%20COVID%2019.ipynb)  [Gitee](https://gitee.com/madlogos/sqlzoo/blob/master/PostgreSQL/09%2B%20COVID%2019.ipynb)
 
-### 提高题
+### 提高题 Advanced
 
 Title | Link
 ------|--------
@@ -103,7 +116,7 @@ Title | Link
 18-2 Congestion - Medium | [GitHub](https://github.com/madlogos/sqlzoo/blob/master/PostgreSQL/18-2%20Congestion%20-%20Medium.ipynb)  [Gitee](https://gitee.com/madlogos/sqlzoo/blob/master/PostgreSQL/18-2%20Congestion%20-%20Medium.ipynb)
 18-3 Congestion - Hard | [GitHub](https://github.com/madlogos/sqlzoo/blob/master/PostgreSQL/18-3%20Congestion%20-%20Hard.ipynb)  [Gitee](https://gitee.com/madlogos/sqlzoo/blob/master/PostgreSQL/18-3%20Congestion%20-%20Hard.ipynb)
 
-### 挑战
+### 挑战 Challenge
 
 Title | Link
 ------|--------

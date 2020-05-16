@@ -1,5 +1,7 @@
 # 基于不同数据科学工具栈的SQLZOO习题求解
 
+[English Version](README_EN.md)
+
 ## 前言
 
 [SQLZOO](https://www.sqlzoo.net)是Andrew Cumming基于MediaWiki开发的免费在线SQL训练网站。它提供了复杂程度不等的一系列SQL问题，用户可以自行提交解答并实时获得正误反馈。该服务的数据库引擎为MariaDB，兼容MySQL语法。本repo使用SQLZOO的数据用例，通过PostgreSQL、R（主要是`dplyr`）、Python（主要是`Pandas`）、Hive、Spark等常用的数据科学工具栈实现求解。
@@ -93,8 +95,7 @@ CREATE TABLE `world` (
 本repo根目录的src文件夹内有一个data.7z文件。用支持7z算法的工具（如Windows下的7z）解压后即得到所有.csv格式的原始数据（共78个）。
 
 | TABLE_NAME                     | TABLE_ROWS |
-|--------------------------------|-----------:
-|
+|:-------------------------------|-----------:|
 | Address                        |        450 |
 | CAM_SMO                        |        354 |
 | Caller                         |        148 |
@@ -174,7 +175,6 @@ CREATE TABLE `world` (
 | vehicle                        |         36 |
 | world                          |        195 |
 
-
 根目录下有`import_csv_mysql.txt`和`import_csv_postgresql.txt`两个文件，根据实际数据库环境选择正确的版本。这两个文件包含了导入csv数据的命令，需要在数据库命令行界面中逐条执行。如在PostgreSQL中执行
 
 ```sql
@@ -193,10 +193,9 @@ load data local infile '~/Documents/sqlzoo/src/data/teacher.csv' into table teac
 即可将actor.csv导入到actor表内。但该命令中的文件路径与你的实际情况可能不符，需要自行调整。
 
 > 需要注意，本repo中csv文件的空值被储存为NULL，能被PostgreSQL识别，但MySQL不行（默认存储为\N），所以需要额外通过`NULLif()`函数转换。可以事先在.csv文件中进行文本替换。
-
 > 另外，在`import_csv_mysql.txt`记录的命令中，有部分日期型字段需要通过`str_to_date(@<field name>, '%a, %d %b %Y %T GMT')`来转换，否则可能无法被MySQL正常识别。
 
-###  RDBMS数据导入Hive
+### RDBMS数据导入Hive
 
 将数据导入Hive，有两种基本办法：
 
@@ -207,65 +206,69 @@ load data local infile '~/Documents/sqlzoo/src/data/teacher.csv' into table teac
 
 #### Docker安装CDH5.13
 
-1. 拉取镜像。镜像很大（7G），速度太慢的话，可使用镜像加速，或将镜像下载到本地后`docker import`。
+##### 拉取镜像
 
-  ```bash
-  docker pull  cloudera/quickstart:lastest
-  ```
+镜像很大（7G），速度太慢的话，可使用镜像加速，或将镜像下载到本地后`docker import`。
 
-1. 启动CDH镜像，之后可通过Kitematic图形化管理
+```bash
+docker pull  cloudera/quickstart:lastest
+```
 
-  ```bash
-  docker run --privileged=true --hostname=quickstart.cloudera \
-  -p 8020:8020 -p 7180:7180 -p 21050:21050 -p 10000:10000 -p 50070:50070 \
-  -p 50075:50075 -p 50010:50010 -p 50020:50020 -p 8888:8888 \
-  -t -i -d <cdh docker image id> /usr/bin/docker-quickstart
-  ```
+##### 启动CDH镜像
 
-1. 进入CDH镜像，启动cloudera-manager
+之后可通过Kitematic图形化管理。
 
-  ```bash
-  docker exec -t -i <cdh docker image id> /bin/bash
-  [root@quickstart /]# /home/cloudera/cloudera-manager --force --express
-  ```
+```bash
+docker run --privileged=true --hostname=quickstart.cloudera \
+-p 8020:8020 -p 7180:7180 -p 21050:21050 -p 10000:10000 -p 50070:50070 \
+-p 50075:50075 -p 50010:50010 -p 50020:50020 -p 8888:8888 \
+-t -i -d <cdh docker image id> /usr/bin/docker-quickstart
+```
 
-1. 允许Docker镜像访问宿主MySQL数据库（在宿主机命令行界面操作）
+##### 进入CDH镜像，启动cloudera-manager
 
-  1. 找到MySQL数据库配置文件 (如Ubuntu中，是/etc/mysql/mysql.conf.d/mysqld.cnf）编辑，将bind 127.0.0.1这句注释掉。
-  2. root进入数据库（本repo以MySQL为例），执行授权命令
+```bash
+docker exec -t -i <cdh docker image id> /bin/bash
+[root@quickstart /]# /home/cloudera/cloudera-manager --force --express
+```
 
-   ```sql
-   grant all privileges on *.* to 'root'@'172.17.0.2' identified by '<pwd>' with grant option;
-   flush privileges;
-   ```
+##### 允许Docker镜像访问宿主MySQL数据库（在宿主机命令行界面操作）
 
-   > pwd为数据库密码。本案例中，宿主机的虚拟IP为172.17.0.1，镜像的虚拟IP为127.17.0.2，故只给cdh镜像开放访问权限。ip可通过`ifconfig`查看。
+- 找到MySQL数据库配置文件 (如Ubuntu中，是/etc/mysql/mysql.conf.d/mysqld.cnf）编辑，将bind 127.0.0.1这句注释掉。
+- root进入数据库（本repo以MySQL为例），执行授权命令
 
-  3. 退出数据库，重启MySQL服务
+```sql
+grant all privileges on *.* to 'root'@'172.17.0.2' identified by '<pwd>' with grant option;
+flush privileges;
+```
 
-  ```bash
-  /etc/init.d/mysql stop
-  /etc/init.d/mysql start
-  ```
+> pwd为数据库密码。本案例中，宿主机的虚拟IP为172.17.0.1，镜像的虚拟IP为127.17.0.2，故只给cdh镜像开放访问权限。ip可通过`ifconfig`查看。
 
-1. 创建.sh脚本，执行sqoop导入。
-  在镜像命令行界面内创建一个.sh脚本，将`import_sqoop_sh.txt`中的内容复制进去，执行，即可将MySQL sqlzoo库中的78张表都导入CDH镜像的Hive中。该脚本循环遍历`tbls`变量病执行`sqoop import`指令:
+- 退出数据库，重启MySQL服务
 
-  ```bash
-  #! /bin/bash
-  read -p "input username:" usernm
-  read -p "input password:" pwd
-  tbls=("table 1", "table 2", ...)
-  for tbl in ${tbls[*]}
-  do
-  sqoop import --connect jdbc:mysql://172.17.0.1:3306/sqlzoo \
-  --username ${usernm} -password ${pwd} --table ${tbl} \
-  --null-string '\\N' --null-non-string '\\N' --fields-terminated-by '\t' \
-  --delete-target-dir --num-mappers 1 --hive-import --hive-overwrite \
-  --hive-database sqlzoo --hive-table ${tbl}
-  echo "${tbl} imported"
-  done
-  ```
+```bash
+/etc/init.d/mysqld restart
+```
+
+##### 创建.sh脚本，执行sqoop导入
+
+在镜像命令行界面内创建一个.sh脚本，将`import_sqoop_sh.txt`中的内容复制进去，执行，即可将MySQL sqlzoo库中的78张表都导入CDH镜像的Hive中。该脚本循环遍历`tbls`变量并执行`sqoop import`指令:
+
+```bash
+#! /bin/bash
+read -p "input username:" usernm
+read -p "input password:" pwd
+tbls=("table 1", "table 2", ...)
+for tbl in ${tbls[*]}
+do
+sqoop import --connect jdbc:mysql://172.17.0.1:3306/sqlzoo \
+--username ${usernm} -password ${pwd} --table ${tbl} \
+--null-string '\\N' --null-non-string '\\N' --fields-terminated-by '\t' \
+--delete-target-dir --num-mappers 1 --hive-import --hive-overwrite \
+--hive-database sqlzoo --hive-table ${tbl}
+echo "${tbl} imported"
+done
+```
 
 最值得注意的地方是`--null-string`和`--null-non-string`。如未指定，则MySQL中的空值会被导为文本'null'。
 
@@ -287,7 +290,7 @@ SQLZOO在[about](https://sqlzoo.net/wiki/SQLZOO:About)中提供了获取原始�
 
 首先，在`test_copytext()`函数中，定义了`prefix`, `db`, `dblen`, `header`几个变量。
 
-如爬取'covid'表，则prefix=''，db='covid'， dblen=19200（该表行数），header则是其表头（以空格分开）。而爬取University Timetables中的'event'表，则prefix='ut_', db='event', dblen=201（该表行数），header则为其表头（以空格分开），这是为了重命名'room'等表，以避免和其他表冲突。
+如爬取'covid'表，则prefix=''，db='covid'， dblen=19200（该表行数），header='name whn confirmed deaths recovered' (表头行，以空格分开）。而爬取University Timetables中的'event'表，则prefix='ut_', db='event', dblen=201（该表行数），header='id modle kind dow tod duration room'（表头行，以空格分开），这是为了重命名'room'等表，以避免和其他表冲突。
 
 然后，设定正确的爬取路径，如:
 

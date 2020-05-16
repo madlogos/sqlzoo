@@ -1,24 +1,48 @@
-# SQLZOO试题的R实现
+# SQLZOO试题的R (`dplyr`) 实现 | R (`dplyr`) Implementation of SQLZOO Solutions
 
-## 步骤
+## 步骤 Steps
 
 1. 在R中安装必要的包，安装方法：
+
     ```r
     install.packages(c('repr', 'IRdisplay', 'evaluate', 'crayon', 'pbdZMQ', 'devtools', 'uuid', 'digest', 'IRkernel))
     ```
+
 1. 安装R内核
     - 当前用户
+
     ```r
     IRkernel::installspec()
     ```
+
     - 系统所有用户
+
     ```r
     IRkernel::installspec(user=FALSE)
     ```
+
 1. 启动数据库`localhost/sqlzoo`（数据需提前导入）。
 1. 通过`DBI`连接sqlzoo数据库。
 
-本案例使用PostgreSQL，也可以使用MySQL/MariaDB。
+---
+
+1. Install R kernel
+    - Current suer
+
+    ```r
+    IRkernel::installspec()
+    ```
+
+    - All the users
+
+    ```r
+    IRkernel::installspec(user=FALSE)
+    ```
+
+1. Boot the database `localhost/sqlzoo` (the data should be imported before hand)
+1. Connect to the sqlzoo database with `DBI`
+
+本案例使用PostgreSQL，也可以使用MySQL/MariaDB。 In this case, PostegreSQL is applied.
 
 ```r
 library(tidyverse)
@@ -39,15 +63,13 @@ con <- dbConnect(
 )
 ```
 
-连接上以后还可以做一些设置，比如将长度显示行数的上限为10：
+连接上以后还可以做一些设置，比如将长度显示行数的上限为10。 Do some configuration after connection, e.g., set the display upper limit of rows = 10.
 
 ```r
 options(repr.matrix.max.rows=10)
 ```
 
-## 举例
-
-接下来就可以用`dplyr`操作数据库了。
+## 举例 Example
 
 ```r
 library(tidyverse)
@@ -70,11 +92,11 @@ Austria | Europe | 83871.0 | 8902600.0 | 416835000000.0 | Vienna | .at | //uploa
 
 > 195 rows, truncated to displaylimit of 10
 
-`world`表一共195行，但由于全局设置了`options(repr.matrix.max.rows)`，默认只显示了10行（前5+后5）。
+`world`表一共195行，但由于全局设置了`options(repr.matrix.max.rows)`，默认只显示了10行（前5+后5）。 There are a total of 195 rows in `world`. But only 10 rows (head 5 + tail 5) are displayed due to the global setting `SqlMagic.displaylimit`.
 
-## 目录
+## 目录 Table of Contents
 
-### 基础题
+### 基础题 Fundermentals
 
 Title | Link
 ------|--------
@@ -92,7 +114,7 @@ Title | Link
 09 Self join | [GitHub](https://github.com/madlogos/sqlzoo/blob/master/R/09%20Self%20join.ipynb)  [Gitee](https://gitee.com/madlogos/sqlzoo/blob/master/R/09%20Self%20join.ipynb)
 09+ COVID-19 | [GitHub](https://github.com/madlogos/sqlzoo/blob/master/R/09%2B%20COVID%2019.ipynb)  [Gitee](https://gitee.com/madlogos/sqlzoo/blob/master/R/09%2B%20COVID%2019.ipynb)
 
-### 提高题
+### 提高题 Advanced
 
 Title | Link
 ------|--------
@@ -122,7 +144,7 @@ Title | Link
 18-2 Congestion - Medium | [GitHub](https://github.com/madlogos/sqlzoo/blob/master/R/18-2%20Congestion%20-%20Medium.ipynb)  [Gitee](https://gitee.com/madlogos/sqlzoo/blob/master/R/18-2%20Congestion%20-%20Medium.ipynb)
 18-3 Congestion - Hard | [GitHub](https://github.com/madlogos/sqlzoo/blob/master/R/18-3%20Congestion%20-%20Hard.ipynb)  [Gitee](https://gitee.com/madlogos/sqlzoo/blob/master/R/18-3%20Congestion%20-%20Hard.ipynb)
 
-### 挑战
+### 挑战 Challenge
 
 Title | Link
 ------|--------

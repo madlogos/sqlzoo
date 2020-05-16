@@ -1,6 +1,6 @@
-# SQLZOO试题的Hive实现
+# SQLZOO试题的Hive实现 | Hive Implementation of SQLZOO Solutions
 
-## 步骤
+## 步骤 Steps
 
 1. 需要用到[`ipython-sql`](https://github.com/catherinedevlin/ipython-sql/)包，安装方法：
 
@@ -15,21 +15,36 @@
 1. 启动Hive（数据需提前导入）。
 1. 通过`sqlalchemy`形式的DB URI连接sqlzoo数据库。本案例中，是通过宿主机连接到Cloudera Docker镜像机10000端口，故URI为`hive://cloudera@quickstart.cloudera:10000/sqlzoo`。
 
+---
+
+1. [`ipython-sql`](https://github.com/catherinedevlin/ipython-sql/) is required. Installation:
+
+    ```bash
+    pip install ipython-sql
+    ```
+
+1. `PyHive` is required, mind the order of installation
+    1. Install neccesary dependencies, e.g., apt-get install `sasl2-bin` & `libsasl2-dev` in Ubuntu
+    1. pip install `pyhs2`
+    1. pip install `'pyhive[hive]'`
+1. Run Hive (data should be imported before hand)
+1. Connect the sqlzoo database with `sqlalchemy` compatible DB URI. In this repo, we connected to Cloudera Docker mirror by 10000 port from the host machine, so the URI is `hive://cloudera@quickstart.cloudera:10000/sqlzoo`
+
 ```sql
 from pyhive import hive
 %load_ext sql
 %sql hive://cloudera@quickstart.cloudera:10000/sqlzoo
 ```
 
-连接上以后还可以做一些设置，比如将长度显示行数的上限为10：
+连接上以后还可以做一些设置，比如将长度显示行数的上限为10. Do some configuration after connection, e.g., set the display upper limit of rows = 10.
 
 ```sql
 %config SqlMagic.displaylimit = 10
 ```
 
-记得每次运行SQL语句时，前面都要加`%%sql magic`符。
+记得每次运行SQL语句时，前面都要加`%%sql` magic符。 Remember to add `%%sql` magic before running SQL syntax.
 
-## 举例
+## 举例 Example
 
 ```sql
 %%sql
@@ -51,11 +66,11 @@ Austria | Europe | 83871.0 | 8902600.0 | 416835000000.0 | Vienna | .at | //uploa
 
 > 195 rows, truncated to displaylimit of 10
 
-`world`表一共195行，但由于全局设置了`SqlMagic.displaylimit`，默认只显示了前10行。
+`world`表一共195行，但由于全局设置了`SqlMagic.displaylimit`，默认只显示了前10行。 There are a total of 195 rows in `world`. But only 10 rows are displayed due to the global setting `SqlMagic.displaylimit`.
 
-## 目录
+## 目录 Table of Contents
 
-### 基础题
+### 基础题 Fundermentals
 
 Title | Link
 ------|--------
@@ -73,7 +88,7 @@ Title | Link
 09 Self join | [GitHub](https://github.com/madlogos/sqlzoo/blob/master/Hive/09%20Self%20join.ipynb)  [Gitee](https://gitee.com/madlogos/sqlzoo/blob/master/Hive/09%20Self%20join.ipynb)
 09+ COVID-19 | [GitHub](https://github.com/madlogos/sqlzoo/blob/master/Hive/09%2B%20COVID%2019.ipynb)  [Gitee](https://gitee.com/madlogos/sqlzoo/blob/master/Hive/09%2B%20COVID%2019.ipynb)
 
-### 提高题
+### 提高题 Advanced
 
 Title | Link
 ------|--------
@@ -103,7 +118,7 @@ Title | Link
 18-2 Congestion - Medium | [GitHub](https://github.com/madlogos/sqlzoo/blob/master/Hive/18-2%20Congestion%20-%20Medium.ipynb)  [Gitee](https://gitee.com/madlogos/sqlzoo/blob/master/Hive/18-2%20Congestion%20-%20Medium.ipynb)
 18-3 Congestion - Hard | [GitHub](https://github.com/madlogos/sqlzoo/blob/master/Hive/18-3%20Congestion%20-%20Hard.ipynb)  [Gitee](https://gitee.com/madlogos/sqlzoo/blob/master/Hive/18-3%20Congestion%20-%20Hard.ipynb)
 
-### 挑战
+### 挑战 Challenge
 
 Title | Link
 ------|--------
