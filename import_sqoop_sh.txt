@@ -5,5 +5,6 @@ tbls=("actor" "Address" "band" "booking" "Caller" "CAM_SMO" "camera" "casting" "
 for tbl in ${tbls[*]}
 do
 sqoop import --connect jdbc:mysql://172.17.0.1:3306/sqlzoo --username ${usernm} -password ${pwd} --table ${tbl} --null-string '\\N' --null-non-string '\\N' --fields-terminated-by '\t' --delete-target-dir --num-mappers 1 --hive-import --hive-overwrite --hive-database sqlzoo --hive-table ${tbl}
+hive -S -e "ALTER TABLE ${tbl} SET TBLPROPERTIES('EXTERNAL'='TRUE');"
 echo "${tbl} imported"
 done

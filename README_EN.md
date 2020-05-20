@@ -34,9 +34,9 @@
   - All the solutions with different tool stacks were stored in their according folders, in .ipynb format. You can open them by initiating `jupyter-lab` or `jupyter notebook`.
   - Each solution folder contains a README.md to introduce how to configure the operation environment and the table of contents.
 - For replicate / recode the solutions, you may need to do the following additional jobs:
-  - Run the commands in `create_tbl_xxx.sql` DDL scripts after creating the database instance (refer to [this chapter](#Create%20RDBMS%20Tables)) to create tables required in the analysis.
-  - Run the commands in `import_csv_xxx.txt` file after creating the tables (refer to [this chapter](#Import%20.csv%20Data%20to%20RDBMS)) to import the .csv raw data unzipped from src directory to the database.
-  - Rename `import_sqoop_sh.txt` to .sh and execute it after configuring the Hadoop/Hive/Sqoop environment to import the data (imported into MySQL using `import_csv_mysql.txt`) to Hive (refer to [this chapter](#Import%20RDBMS%20Data%20to%20Hive)).
+  - Run the commands in `create_tbl_xxx.sql` DDL scripts after creating the database instance (refer to [this chapter](#Create-RDBMS-Tables)) to create tables required in the analysis.
+  - Run the commands in `import_csv_xxx.txt` file after creating the tables (refer to [this chapter](#Import-.csv-Data-to-RDBMS)) to import the .csv raw data unzipped from src directory to the database.
+  - Rename `import_sqoop_sh.txt` to .sh and execute it after configuring the Hadoop/Hive/Sqoop environment to import the data (imported into MySQL using `import_csv_mysql.txt`) to Hive (refer to [this chapter](#Import-RDBMS-Data-to-Hive)).
 
 ## Environment Build-up
 
@@ -57,7 +57,7 @@ All the solutions in this repo were based on `jupyter-lab` (or `jupyter notebook
 - R：install `IRkernel`, `IRdisplay` and other dependencies to support R kernel, install `dplyr` in R
 - Python：pip install `pandas`
 - Hive：install jdbc drivers required by sqoop, and bash install `sasl2-bin`, `libsasl2-dev`, pip install `pyhs2` & `pyhive[hive]`
-- Spark：
+- Spark：Spark computation environment is set, pip install `findspark`
 
 ## Data Preparations
 
@@ -199,8 +199,8 @@ to import actor.csv to the table actor. But note that the file location may be d
 
 There are two basic approaches to import data to Hive
 
-1. Compose similar .hql scripts as depicted in [this chapter](#Import%20.csv%20Data%20to%20RDBMS) to create empty tables in Hive, and then execute `load data` commands to import .csv file to the empty tables.
-2. Import the data imported into RDBMS based on [this chapter](#Import%20.csv%20Data%20to%20RDBMS) to Hive using sqoop scripts.
+1. Compose similar .hql scripts as depicted in [this chapter](#Import-.csv-Data-to-RDBMS) to create empty tables in Hive, and then execute `load data` commands to import .csv file to the empty tables.
+2. Import the data imported into RDBMS based on [this chapter](#Import-.csv-Data-to-RDBMS) to Hive using sqoop scripts.
 
 The following is what was applied in this repo (the 2nd approach).
 
@@ -221,14 +221,14 @@ After initialization, you can use Kitematic GUI to manage the docker mirror.
 ```bash
 docker run --privileged=true --hostname=quickstart.cloudera \
 -p 8020:8020 -p 7180:7180 -p 21050:21050 -p 10000:10000 -p 50070:50070 \
--p 50075:50075 -p 50010:50010 -p 50020:50020 -p 8888:8888 \
+-p 50075:50075 -p 50010:50010 -p 50020:50020 -p 8888:8888 -p 9083:9083 \
 -t -i -d <cdh docker image id> /usr/bin/docker-quickstart
 ```
 
 ##### Initiate cloudera-manager inside CDH
 
 ```bash
-docker exec -t -i <cdh docker image id> /bin/bash
+docker exec -ti <cdh docker image id> /bin/bash
 [root@quickstart /]# /home/cloudera/cloudera-manager --force --express
 ```
 
@@ -268,6 +268,7 @@ sqoop import --connect jdbc:mysql://172.17.0.1:3306/sqlzoo \
 --null-string '\\N' --null-non-string '\\N' --fields-terminated-by '\t' \
 --delete-target-dir --num-mappers 1 --hive-import --hive-overwrite \
 --hive-database sqlzoo --hive-table ${tbl}
+hive -S -e 'ALTER TABLE sqlzoo.'${tbl}' SET TBLPROPERTIES("EXTERNAL"="TRUE");'
 echo "${tbl} imported"
 done
 ```

@@ -57,7 +57,7 @@
 - R：需安装`IRkernel`、`IRdisplay`及其依赖包以支持R核，并在R中安装`dplyr`包
 - Python：pip安装`pandas`包
 - Hive：安装sqoop所需要的jdbc驱动，并安装`sasl2-bin`、`libsasl2-dev`，pip安装`pyhs2`和`pyhive[hive]`
-- Spark：
+- Spark：Spark环境配置成功，pip安装`findspark`
 
 ## 数据准备
 
@@ -221,14 +221,14 @@ docker pull  cloudera/quickstart:lastest
 ```bash
 docker run --privileged=true --hostname=quickstart.cloudera \
 -p 8020:8020 -p 7180:7180 -p 21050:21050 -p 10000:10000 -p 50070:50070 \
--p 50075:50075 -p 50010:50010 -p 50020:50020 -p 8888:8888 \
+-p 50075:50075 -p 50010:50010 -p 50020:50020 -p 8888:8888  -p 9083:9083 \
 -t -i -d <cdh docker image id> /usr/bin/docker-quickstart
 ```
 
 ##### 进入CDH镜像，启动cloudera-manager
 
 ```bash
-docker exec -t -i <cdh docker image id> /bin/bash
+docker exec -ti <cdh docker image id> /bin/bash
 [root@quickstart /]# /home/cloudera/cloudera-manager --force --express
 ```
 
@@ -266,6 +266,7 @@ sqoop import --connect jdbc:mysql://172.17.0.1:3306/sqlzoo \
 --null-string '\\N' --null-non-string '\\N' --fields-terminated-by '\t' \
 --delete-target-dir --num-mappers 1 --hive-import --hive-overwrite \
 --hive-database sqlzoo --hive-table ${tbl}
+hive -S -e 'ALTER TABLE sqlzoo.'${tbl}' SET TBLPROPERTIES("EXTERNAL"="TRUE");'
 echo "${tbl} imported"
 done
 ```

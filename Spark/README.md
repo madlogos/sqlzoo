@@ -2,7 +2,52 @@
 
 ## 步骤 Steps
 
+1. 需要安装好Spark环境，可直接从[官网](http://spark.apache.org/downloads.html)下载Spark with Hadoop，解压到宿主机本地。推荐用Spark2。
+2. 将SPARK_HOME路径写入环境PATH，命令行输入`spark-shell`可调出Scala CLI，或`pyspark`调出pyspark CLI。
+    - Windows，在环境变量界面配置SPARK_HOME入口
+    - Linux/macOS，在/etc/profile中export SPARK_HOME，并添加到PATH
+3. 确保CDH5的Docker镜像已启动，8020、9083端口已映射到宿主机，Hive metastore service已启动。
+4. 通过SparkSession.config('spark.sql.warehouse.dir')和config('hive.metastore.uris')配置连接，让pyspark连接到CDH5 Docker镜像中的Hive数据库。
+
+---
+
+1. Install Spark environment. You can download Spark with Hadoop from [Official website](http://spark.apache.org/downloads.html) andunzip it to host local disk. Spark2 is recommended.
+2. Write SPARK_HOME to environment PATH. Then you can call Scala CLI by inputing `spark-shell` or pyspark by inputing `pyspark`in the CLI.
+    - Windows: configure SPARK_HOME entry in the environment variable pane
+    - Linux/macOS: export SPARK_HOME in /etc/profile and then combine it into PATH
+3. Ensure that CDH5 Docker image is booted and ports 8020, 9083 are exposed to the host machine,  and Hive metastore service is started.
+4. Configure the connection using SparkSession.config('spark.sql.warehouse.dir') and config('hive.metastore.uris') to facilitate pyspark to connect to Hive database in CDH5 Docker image.
+
+
+```python
+from pyspark.sql import SparkSession
+ss = (SparkSession.builder.appName('app00')
+      .config('spark.sql.warehouse.dir', 'hdfs://quickstart.cloudera:8020/user/hive/warehouse')
+      .config('hive.metastore.uris', 'thrift://quickstart.cloudera:9083')
+      .enableHiveSupport().getOrCreate())
+```
+
+
 ## 举例 Example
+
+```python
+ss.read.table('sqlzoo.world').show()
+```
+
+```text
+name | continent | area | population | gdp | capital | tld | flag
+--------|---------------|-------|----------------|-------|---------|-----|------------
+Afghanistan | Asia | 652230.0 | 32225560.0 | 21992000000.0 | Kabul | .af | //upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Afghanistan.svg
+Albania | Europe | 28748.0 | 2845955.0 | 13039000000.0 | Tirana | .al | //upload.wikimedia.org/wikipedia/commons/3/36/Flag_of_Albania.svg
+Algeria | Africa | 2381741.0 | 43000000.0 | 167555000000.0 | Algiers | .dz | //upload.wikimedia.org/wikipedia/commons/7/77/Flag_of_Algeria.svg
+Andorra | Europe | 468.0 | 77543.0 | 3278000000.0 | Andorra la Vella | .ad | //upload.wikimedia.org/wikipedia/commons/1/19/Flag_of_Andorra.svg
+Angola | Africa | 1246700.0 | 31127674.0 | 126505000000.0 | Luanda | .ao | //upload.wikimedia.org/wikipedia/commons/9/9d/Flag_of_Angola.svg
+Antigua and Barbuda | Caribbean | 442.0 | 96453.0 | 1248000000.0 | St. John's | .ag | //upload.wikimedia.org/wikipedia/commons/8/89/Flag_of_Antigua_and_Barbuda.svg
+Argentina | South America | 2780400.0 | 44938712.0 | 637486000000.0 | Buenos Aires | .ar | //upload.wikimedia.org/wikipedia/commons/1/1a/Flag_of_Argentina.svg
+Armenia | Eurasia | 29743.0 | 2957500.0 | 11536000000.0 | Yerevan | .am | //upload.wikimedia.org/wikipedia/commons/2/2f/Flag_of_Armenia.svg
+Australia | Oceania | 7692024.0 | 25690023.0 | 1408675000000.0 | Canberra | .au | //upload.wikimedia.org/wikipedia/commons/8/88/Flag_of_Australia_%28converted%29.svg
+Austria | Europe | 83871.0 | 8902600.0 | 416835000000.0 | Vienna | .at | //upload.wikimedia.org/wikipedia/commons/4/41/Flag_of_Austria.svg
+```
 
 ## 目录 Table of Contents
 
