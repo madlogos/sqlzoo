@@ -7,7 +7,9 @@
     - Windows，在环境变量界面配置SPARK_HOME入口
     - Linux/macOS，在/etc/profile中export SPARK_HOME，并添加到PATH
 3. 确保CDH5的Docker镜像已启动，8020、9083端口已映射到宿主机，Hive metastore service已启动。
-4. 通过SparkSession.config('spark.sql.warehouse.dir')和config('hive.metastore.uris')配置连接，让pyspark连接到CDH5 Docker镜像中的Hive数据库。
+4. Jupyter中，
+    - `PySpark` (00 -- 09+): 通过SparkSession.config('spark.sql.warehouse.dir')和config('hive.metastore.uris')配置连接，让pyspark连接到CDH5 Docker镜像中的Hive数据库。
+    - `Scala` (11 -- 19): 通过NotebookSparkSession配置`spark.sql.warehouse.dir`,`hive.metastore.uris`, `spark.sql.catalogImplementation`，（初次Notebook会自动下载安装各类依赖，如spark-hive, spark-stubs），让scala连接到CDH5 Docker镜像中的Hive数据库。
 
 ---
 
@@ -16,17 +18,50 @@
     - Windows: configure SPARK_HOME entry in the environment variable pane
     - Linux/macOS: export SPARK_HOME in /etc/profile and then combine it into PATH
 3. Ensure that CDH5 Docker image is booted and ports 8020, 9083 are exposed to the host machine,  and Hive metastore service is started.
-4. Configure the connection using SparkSession.config('spark.sql.warehouse.dir') and config('hive.metastore.uris') to facilitate pyspark to connect to Hive database in CDH5 Docker image.
+4. In Jupyter,
+    - `PySpark` (00 -- 09+): Configure the connection using SparkSession.config('spark.sql.warehouse.dir') and config('hive.metastore.uris') to facilitate pyspark to connect to Hive database in CDH5 Docker image.
+    - `Scala` (11 -- 19): Configure `spark.sql.warehouse.dir`,`hive.metastore.uris`, `spark.sql.catalogImplementation`, etc. (the Notebook will download and install necessary dependencies automatically at the first time, e.g., spark-hive, spark-stubs) in NotebookSparkSession to establish connection of Scala to Hive database in CDH5 Docker imae.
 
+---
 
-```python
-from pyspark.sql import SparkSession
-ss = (SparkSession.builder.appName('app00')
-      .config('spark.sql.warehouse.dir', 'hdfs://quickstart.cloudera:8020/user/hive/warehouse')
-      .config('hive.metastore.uris', 'thrift://quickstart.cloudera:9083')
-      .enableHiveSupport().getOrCreate())
-```
+- PySpark (nb #00 -- #09+)
 
+    ```python
+    from pyspark.sql import SparkSession
+    ss = (SparkSession.builder.appName('app00')
+          .config('spark.sql.warehouse.dir', 'hdfs://quickstart.cloudera:8020/user/hive/warehouse')
+          .config('hive.metastore.uris', 'thrift://quickstart.cloudera:9083')
+          .enableHiveSupport().getOrCreate())
+    ```
+
+- Scala (nb #11 --  #19)
+
+    ```scala
+    // lower down the logger level
+    import org.apache.log4j.{Level, Logger}
+    Logger.getLogger("org").setLevel(Level.OFF)
+
+    // import modules
+    import $ivy.`org.apache.spark::spark-sql:2.4.0`
+    import org.apache.spark.sql._
+    import org.apache.spark.sql.functions._
+
+    // set up NotebookSparkSession, 
+    val spark = {
+        NotebookSparkSession.builder()
+        .progress(false)
+        .appName("app00")
+        .master("local[*]")
+        .config("spark.sql.warehouse.dir", "hdfs://quickstart.cloudera:8020/user/hive/warehouse")
+        .config("hive.metastore.uris", "thrift://quickstart.cloudera:9083")
+        .config("spark.sql.catalogImplementation", "hive")
+        .config("spark.sql.repl.eagerEval.enabled", "True")
+        .getOrCreate()
+    }
+
+    // import implicits
+    import spark.implicits._
+    ```
 
 ## 举例 Example
 

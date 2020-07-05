@@ -48,7 +48,7 @@ All the solutions in this repo were based on `jupyter-lab` (or `jupyter notebook
   - Install and run [PostgreSQL](https://www.postgresql.org/download/)
   - Import SQLZOO data to PostgreSQL instance
 - Hadoop solutions (Hive, Spark):
-  - Hive: install Hadoop & Hive in Linux. Cloud service or Docker version of CDH are also applicable.
+  - Hive: install [Hadoop & Hive](http://spark.apache.org/downloads.html) in Linux. Cloud service or Docker version of CDH are also applicable.
   - Spark: install independent Hadoop+Spark packages, or use cloud servie or Docker version of CDH.
 
 ### Specific Environment
@@ -57,8 +57,10 @@ All the solutions in this repo were based on `jupyter-lab` (or `jupyter notebook
 - R：install `IRkernel`, `IRdisplay` and other dependencies to support R kernel, install `dplyr` in R
 - Python：pip install `pandas`
 - Hive：install jdbc drivers required by sqoop, and bash install `sasl2-bin`, `libsasl2-dev`, pip install `pyhs2` & `pyhive[hive]`
-- Spark：Spark computation environment is set, pip install `findspark`
-
+- Spark：
+      - `PySpark`: Spark computation environment is set, pip install `findspark`
+      - `Scala` kernel: Download, compile install and configure [almond.sh](https://almond.sh/docs/quick-start-install) according to the manual. Note that the almond version should be compatible with the scala. In this instance, almond 0.10 and scala 2.12 were applied, with spark 2.4.6.
+      
 ## Data Preparations
 
 ### Create RDBMS Tables

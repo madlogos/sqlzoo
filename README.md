@@ -49,7 +49,7 @@
   - 将SQLZOO数据导入PostgreSQL实例中
 - 大数据环境 (Hive、Spark)：
   - Hive: 需Linux环境下安装Hadoop、Hive。也可租用云服务，或Docker安装CDH工具集。
-  - Spark: 可安装Hadoop+Spark工具包，租用云服务，或Docker安装CDH工具集。
+  - Spark: 可安装[Hadoop+Spark工具包](http://spark.apache.org/downloads.html)，租用云服务，或Docker安装CDH工具集。
 
 ### 特定环境
 
@@ -57,7 +57,9 @@
 - R：需安装`IRkernel`、`IRdisplay`及其依赖包以支持R核，并在R中安装`dplyr`包
 - Python：pip安装`pandas`包
 - Hive：安装sqoop所需要的jdbc驱动，并安装`sasl2-bin`、`libsasl2-dev`，pip安装`pyhs2`和`pyhive[hive]`
-- Spark：Spark环境配置成功，pip安装`findspark`
+- Spark：
+    - `PySpark`: Spark环境配置成功，pip安装`findspark`
+    -`Scala`: 按照手册下载并编译安装[almond.sh](https://almond.sh/docs/quick-start-install)。注意，almond版本应与scala相符，如本实例中使用almond 0.10和scala 2.12，spark版本为2.4.6。
 
 ## 数据准备
 
