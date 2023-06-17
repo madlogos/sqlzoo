@@ -4,7 +4,7 @@
 
 ## 前言
 
-[SQLZOO](https://www.sqlzoo.net)是Andrew Cumming基于MediaWiki开发的免费在线SQL训练网站。它提供了复杂程度不等的一系列SQL问题，用户可以自行提交解答并实时获得正误反馈。该服务的数据库引擎为MariaDB，兼容MySQL语法。本repo使用SQLZOO的数据用例，通过PostgreSQL、R（主要是`dplyr`）、Python（主要是`Pandas`）、Hive、Spark等常用的数据科学工具栈实现求解。
+[SQLZOO](https://www.sqlzoo.net)是Andrew Cumming基于MediaWiki开发的免费在线SQL训练网站。它提供了复杂程度不等的一系列SQL问题，用户可以自行提交解答并实时获得正误反馈。该服务的数据库引擎为MariaDB，兼容MySQL语法。本repo使用SQLZOO的数据用例，通过PostgreSQL、R（主要是`dplyr`）、Python（主要是`Pandas`）、Hive、Spark（`PySpark`和`Scala`）等常用的数据科学工具栈实现求解。
 
 ## 用法
 
@@ -36,7 +36,7 @@
 - 自行复现/重写求解方法，需额外完成下列步骤：
   - 创建本地数据库后，可直接运行根目录的`create_tbl_xxx.sql`DDL脚本（详见[后文](#创建RDBMS数据表)），创建分析中涉及到的表。
   - 创建数据表后，可逐条运行根目录下`import_csv_xxx.txt`文件中的命令（详见[后文](#csv数据导入RDBMS)），将src目录中解压出来的.csv原始数据导入数据库。
-  -  安装并配置好Hadoop/Hive/Sqoop环境后，将`import_sqoop_sh.txt`后缀重命名为.sh并执行，从而把前述步骤中通过`import_csv_mysql.txt`导入MySQL的数据导进Hive（详见[后文](#RDBMS数据导入Hive)）。
+  - 安装并配置好Hadoop/Hive/Sqoop环境后，将`import_sqoop_sh.txt`后缀重命名为.sh并执行，从而把前述步骤中通过`import_csv_mysql.txt`导入MySQL的数据导进Hive（详见[后文](#RDBMS数据导入Hive)）。
 
 ## 环境搭建
 
@@ -48,8 +48,8 @@
   - 安装并运行[PostgreSQL](https://www.postgresql.org/download/)
   - 将SQLZOO数据导入PostgreSQL实例中
 - 大数据环境 (Hive、Spark)：
-  - Hive: 需Linux环境下安装Hadoop、Hive。也可租用云服务，或Docker安装CDH工具集。
-  - Spark: 可安装[Hadoop+Spark工具包](http://spark.apache.org/downloads.html)，租用云服务，或Docker安装CDH工具集。
+  - Hive: 需Linux环境下安装Hadoop、Hive，或Docker安装CDH工具集，或Docker安装Hadoop+Hive集群。也可租用云服务。
+  - Spark: 可安装[Hadoop+Spark工具包](http://spark.apache.org/downloads.html)，或Docker安装CDH工具集，或Docker安装Spark集群。也可租用云服务。
 
 ### 特定环境
 
@@ -58,8 +58,8 @@
 - Python：pip安装`pandas`包
 - Hive：安装sqoop所需要的jdbc驱动，并安装`sasl2-bin`、`libsasl2-dev`，pip安装`pyhs2`和`pyhive[hive]`
 - Spark：
-    - `PySpark`: Spark环境配置成功，pip安装`findspark`
-    -`Scala`: 按照手册下载并编译安装[almond.sh](https://almond.sh/docs/quick-start-install)。注意，almond版本应与scala相符，如本实例中使用almond 0.10和scala 2.12，spark版本为2.4.6。
+  - `PySpark`: Spark环境配置成功，pip安装`findspark`
+  - `Scala`: 按照手册下载并编译安装[almond.sh](https://almond.sh/docs/quick-start-install)。注意，almond版本应与scala相符，如本实例中使用almond 0.14和scala 2.13，spark版本为3.4.0。
 
 ## 数据准备
 
@@ -180,7 +180,7 @@ CREATE TABLE `world` (
 根目录下有`import_csv_mysql.txt`和`import_csv_postgresql.txt`两个文件，根据实际数据库环境选择正确的版本。这两个文件包含了导入csv数据的命令，需要在数据库命令行界面中逐条执行。如在PostgreSQL中执行
 
 ```sql
-COPY teacher FROM '~/Documents/sqlzoo/src/teacher.csv' WITH DELIMITER ',' CSV NULL AS 'NULL' HEADER;
+\COPY teacher FROM '~/Documents/sqlzoo/src/teacher.csv' WITH DELIMITER ',' CSV NULL AS 'NULL' HEADER;
 ```
 
 或在MySQL中执行
@@ -213,7 +213,7 @@ load data local infile '~/Documents/sqlzoo/src/data/teacher.csv' into table teac
 镜像很大（7G），速度太慢的话，可使用镜像加速，或将镜像下载到本地后`docker import`。
 
 ```bash
-docker pull  cloudera/quickstart:lastest
+docker pull cloudera/quickstart:lastest
 ```
 
 ##### 启动CDH镜像
@@ -222,8 +222,9 @@ docker pull  cloudera/quickstart:lastest
 
 ```bash
 docker run --privileged=true --hostname=quickstart.cloudera \
--p 8020:8020 -p 7180:7180 -p 21050:21050 -p 10000:10000 -p 50070:50070 \
--p 50075:50075 -p 50010:50010 -p 50020:50020 -p 8888:8888  -p 9083:9083 \
+-p 4040:4040 -p 7077:7077 -p 8020:8020 -p 7180:7180 -p 21050:21050 \
+-p 10000:10000 -p 50070:50070 -p 50075:50075 -p 50010:50010 -p 50020:50020 \
+-p 28080:8080 -p 18080:18080 -p 8888:8888 -p 9083:9083 \
 -t -i -d <cdh docker image id> /usr/bin/docker-quickstart
 ```
 
@@ -231,7 +232,7 @@ docker run --privileged=true --hostname=quickstart.cloudera \
 
 ```bash
 docker exec -ti <cdh docker image id> /bin/bash
-[root@quickstart /]# /home/cloudera/cloudera-manager --force --express
+[root@quickstart /]# /home/cloudera/cloudera-manager --force --express && service ntpd start
 ```
 
 ##### 允许Docker镜像访问宿主MySQL数据库（在宿主机命令行界面操作）
@@ -259,7 +260,7 @@ flush privileges;
 ```bash
 #! /bin/bash
 read -p "input username:" usernm
-read -p "input password:" pwd
+read -s -p "input password:" pwd
 tbls=("table 1", "table 2", ...)
 for tbl in ${tbls[*]}
 do
@@ -274,6 +275,10 @@ done
 ```
 
 最值得注意的地方是`--null-string`和`--null-non-string`。如未指定，则MySQL中的空值会被导为文本'null'。
+
+#### Docker安装Hadoop+Hive+Spark集群
+
+由于CDH6开始不再免费，可从GitHub拉取[仓库](https://github.com/myamafuj/hadoop-hive-spark-docker)，基于Docker Compose脚本创建一主二从伪集群。
 
 ## 获取原始数据
 

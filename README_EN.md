@@ -4,7 +4,7 @@
 
 ## Foreword
 
-[SQLZOO](https://www.sqlzoo.net) is a free online SQL bootcamp playground developed with MediaWiki by Andrew Cumming. It provides a series of SQL problems varying from easy to difficult for users to submit solutions and get instant feedback interactively. This service use MariaDB as database engine which is also compatible with MySQL syntax. My repo uses the data set use cases from SQLZOO, with Jupyter Notebook solutions using various popular data science tool stacks such as PostgreSQL, R (majorly `dplyr`), Python (majorly `Pandas`), Hive, Spark, etc.
+[SQLZOO](https://www.sqlzoo.net) is a free online SQL bootcamp playground developed with MediaWiki by Andrew Cumming. It provides a series of SQL problems varying from easy to difficult for users to submit solutions and get instant feedback interactively. This service use MariaDB as database engine which is also compatible with MySQL syntax. My repo uses the data set use cases from SQLZOO, with Jupyter Notebook solutions using various popular data science tool stacks such as PostgreSQL, R (majorly `dplyr`), Python (majorly `Pandas`), Hive, Spark (`PySpark` and `Scala`), etc.
 
 ## Usage
 
@@ -48,8 +48,8 @@ All the solutions in this repo were based on `jupyter-lab` (or `jupyter notebook
   - Install and run [PostgreSQL](https://www.postgresql.org/download/)
   - Import SQLZOO data to PostgreSQL instance
 - Hadoop solutions (Hive, Spark):
-  - Hive: install [Hadoop & Hive](http://spark.apache.org/downloads.html) in Linux. Cloud service or Docker version of CDH are also applicable.
-  - Spark: install independent Hadoop+Spark packages, or use cloud servie or Docker version of CDH.
+  - Hive: install [Hadoop & Hive](http://spark.apache.org/downloads.html) in Linux, or Docker version of CDH, or Docker image of Hadoop+Hive cluster. Cloud service is also applicable.
+  - Spark: install independent Hadoop+Spark packages, or Docker version of CDH, or Docker image of Spark cluster. Cloud servie is also applicable.
 
 ### Specific Environment
 
@@ -58,9 +58,8 @@ All the solutions in this repo were based on `jupyter-lab` (or `jupyter notebook
 - Python：pip install `pandas`
 - Hive：install jdbc drivers required by sqoop, and bash install `sasl2-bin`, `libsasl2-dev`, pip install `pyhs2` & `pyhive[hive]`
 - Spark：
-      - `PySpark`: Spark computation environment is set, pip install `findspark`
-      - `Scala` kernel: Download, compile install and configure [almond.sh](https://almond.sh/docs/quick-start-install) according to the manual. Note that the almond version should be compatible with the scala. In this instance, almond 0.10 and scala 2.12 were applied, with spark 2.4.6.
-      
+  - `PySpark`: Spark computation environment is set, pip install `findspark`
+  - `Scala` kernel: Download, compile install and configure [almond.sh](https://almond.sh/docs/quick-start-install) according to the manual. Note that the almond version should be compatible with the scala. In this instance, almond 0.14 and scala 2.13 were applied, with spark 3.4.0.
 ## Data Preparations
 
 ### Create RDBMS Tables
@@ -180,7 +179,7 @@ There is a data.7z archive under src directory of this repo. Unzip it using any 
 There are two script files `import_csv_mysql.txt` & `import_csv_postgresql.txt` under the root directory. Choose the correct one according to your own database environment. The two files stored all the commands that import .csv data to database. You need to run them one by one in a database CLI. For example, execute the follwing command in PostgreSQL
 
 ```sql
-COPY teacher FROM '~/Documents/sqlzoo/src/teacher.csv' WITH DELIMITER ',' CSV NULL AS 'NULL' HEADER;
+\COPY teacher FROM '~/Documents/sqlzoo/src/teacher.csv' WITH DELIMITER ',' CSV NULL AS 'NULL' HEADER;
 ```
 
 or the following in MySQL
@@ -222,8 +221,9 @@ After initialization, you can use Kitematic GUI to manage the docker mirror.
 
 ```bash
 docker run --privileged=true --hostname=quickstart.cloudera \
--p 8020:8020 -p 7180:7180 -p 21050:21050 -p 10000:10000 -p 50070:50070 \
--p 50075:50075 -p 50010:50010 -p 50020:50020 -p 8888:8888 -p 9083:9083 \
+-p 4040:4040 -p 7077:7077 -p 8020:8020 -p 7180:7180 -p 21050:21050 \
+-p 10000:10000 -p 50070:50070 -p 50075:50075 -p 50010:50010 -p 50020:50020 \
+-p 28080:8080 -p 18080:18080 -p 8888:8888 -p 9083:9083 \
 -t -i -d <cdh docker image id> /usr/bin/docker-quickstart
 ```
 
@@ -231,7 +231,7 @@ docker run --privileged=true --hostname=quickstart.cloudera \
 
 ```bash
 docker exec -ti <cdh docker image id> /bin/bash
-[root@quickstart /]# /home/cloudera/cloudera-manager --force --express
+[root@quickstart /]# /home/cloudera/cloudera-manager --force --express && service ntpd start
 ```
 
 ##### Allow Docker Mirror to Access the Host MySQL Database
@@ -261,7 +261,7 @@ Create a .sh script inside the docker mirror and copy the codes in `import_sqoop
 ```bash
 #! /bin/bash
 read -p "input username:" usernm
-read -p "input password:" pwd
+read -s -p "input password:" pwd
 tbls=("table 1", "table 2", ...)
 for tbl in ${tbls[*]}
 do
@@ -276,6 +276,10 @@ done
 ```
 
 Take care of the parameters `--null-string` & `--null-non-string`. If not assigned, the missing values in MySQL will be replaced with string 'null'.
+
+#### Install Dockerized Hadoop+Hive+Spark Cluster
+
+Since CDH 6 has no longer been free, it is recommended to pull [repo](https://github.com/myamafuj/hadoop-hive-spark-docker) from GitHub and create a pseudo-cluster based on Docker compose scripts.
 
 ## Obtain Raw Data
 

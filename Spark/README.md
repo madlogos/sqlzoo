@@ -3,28 +3,30 @@
 ## 步骤 Steps
 
 1. 需要安装好Spark环境，可直接从[官网](http://spark.apache.org/downloads.html)下载Spark with Hadoop，解压到宿主机本地。推荐用Spark2。
-2. 将SPARK_HOME路径写入环境PATH，命令行输入`spark-shell`可调出Scala CLI，或`pyspark`调出pyspark CLI。
-    - Windows，在环境变量界面配置SPARK_HOME入口
-    - Linux/macOS，在/etc/profile中export SPARK_HOME，并添加到PATH
-3. 确保CDH5的Docker镜像已启动，8020、9083端口已映射到宿主机，Hive metastore service已启动。
-4. Jupyter中，
-    - `PySpark` (00 -- 09+): 通过SparkSession.config('spark.sql.warehouse.dir')和config('hive.metastore.uris')配置连接，让pyspark连接到CDH5 Docker镜像中的Hive数据库。
-    - `Scala` (11 -- 19): 通过NotebookSparkSession配置`spark.sql.warehouse.dir`,`hive.metastore.uris`, `spark.sql.catalogImplementation`，（初次Notebook会自动下载安装各类依赖，如spark-hive, spark-stubs），让scala连接到CDH5 Docker镜像中的Hive数据库。
+2. 将`SPARK_HOME`路径写入环境PATH，命令行输入`spark-shell`可调出Scala CLI，或`pyspark`调出pyspark CLI。
+    - Windows，在环境变量界面配置`SPARK_HOME`入口
+    - Linux/macOS，在/etc/profile中`export SPARK_HOME`，并添加到PATH
+3. 确保Spark镜像已启动，Hive metastore service已启动。
+    1. CDH5的Docker镜像：8020、9083端口已映射到宿主机。
+    2. 或使用Hadoop-hive-spark Docker镜像：确保7077、9000、9083端口已映射到宿主机。
+
+4. Jupyter中，通过SparkSession.config('spark.sql.warehouse.dir')和config('hive.metastore.uris')配置PySpark连接，让pyspark连接到Docker镜像中的Hive数据库。
 
 ---
 
 1. Install Spark environment. You can download Spark with Hadoop from [Official website](http://spark.apache.org/downloads.html) andunzip it to host local disk. Spark2 is recommended.
-2. Write SPARK_HOME to environment PATH. Then you can call Scala CLI by inputing `spark-shell` or pyspark by inputing `pyspark`in the CLI.
-    - Windows: configure SPARK_HOME entry in the environment variable pane
-    - Linux/macOS: export SPARK_HOME in /etc/profile and then combine it into PATH
-3. Ensure that CDH5 Docker image is booted and ports 8020, 9083 are exposed to the host machine,  and Hive metastore service is started.
-4. In Jupyter,
-    - `PySpark` (00 -- 09+): Configure the connection using SparkSession.config('spark.sql.warehouse.dir') and config('hive.metastore.uris') to facilitate pyspark to connect to Hive database in CDH5 Docker image.
-    - `Scala` (11 -- 19): Configure `spark.sql.warehouse.dir`,`hive.metastore.uris`, `spark.sql.catalogImplementation`, etc. (the Notebook will download and install necessary dependencies automatically at the first time, e.g., spark-hive, spark-stubs) in NotebookSparkSession to establish connection of Scala to Hive database in CDH5 Docker imae.
+2. Write `SPARK_HOME` to environment PATH. Then you can call Scala CLI by inputing `spark-shell` or pyspark by inputing `pyspark`in the CLI.
+    - Windows: configure `SPARK_HOME` entry in the environment variable pane
+    - Linux/macOS: `export SPARK_HOME` in /etc/profile and then combine it into PATH
+3. Ensure that CDH5 Docker image is booted and Hive metastore service is started.
+    1. CDH5: ensure ports 8020, 9083 are exposed to the host machine.
+    2. Hadoop-hive-spark Docker image: ensure ports 7077, 9000, 9083 are exposed to the host machine. 
+
+4. In Jupyter, configure the connection using SparkSession.config('spark.sql.warehouse.dir') and config('hive.metastore.uris') to facilitate pyspark to connect to Hive database in Docker image.
 
 ---
 
-- PySpark (nb #00 -- #09+)
+- PySpark (CDH5)
 
     ```python
     from pyspark.sql import SparkSession
@@ -34,33 +36,24 @@
           .enableHiveSupport().getOrCreate())
     ```
 
-- Scala (nb #11 --  #19)
+- PySpark (Hadoop-hive-spark)
 
-    ```scala
-    // lower down the logger level
-    import org.apache.log4j.{Level, Logger}
-    Logger.getLogger("org").setLevel(Level.OFF)
-
-    // import modules
-    import $ivy.`org.apache.spark::spark-sql:2.4.0`
-    import org.apache.spark.sql._
-    import org.apache.spark.sql.functions._
-
-    // set up NotebookSparkSession, 
-    val spark = {
-        NotebookSparkSession.builder()
-        .progress(false)
-        .appName("app00")
-        .master("local[*]")
-        .config("spark.sql.warehouse.dir", "hdfs://quickstart.cloudera:8020/user/hive/warehouse")
-        .config("hive.metastore.uris", "thrift://quickstart.cloudera:9083")
-        .config("spark.sql.catalogImplementation", "hive")
-        .config("spark.sql.repl.eagerEval.enabled", "True")
-        .getOrCreate()
-    }
-
-    // import implicits
-    import spark.implicits._
+    ```python
+    import findspark
+    import pandas as pd
+    findspark.init()
+    
+    SVR = '192.168.31.31'
+    from pyspark.sql import SparkSession
+    
+    sc = (SparkSession.builder.appName('app00') 
+          .master(f'spark://{SVR}:7077') 
+          .config('spark.sql.warehouse.dir', f'hdfs://{SVR}:9000/user/hive/warehouse') 
+          .config('spark.cores.max', '4') 
+          .config('spark.executor.instances', '1') 
+          .config('spark.executor.cores', '2') 
+          .config('spark.executor.memory', '10g') 
+          .enableHiveSupport().getOrCreate())
     ```
 
 ## 举例 Example
@@ -69,19 +62,22 @@
 ss.read.table('sqlzoo.world').show()
 ```
 
-```text
-name | continent | area | population | gdp | capital | tld | flag
---------|---------------|-------|----------------|-------|---------|-----|------------
-Afghanistan | Asia | 652230.0 | 32225560.0 | 21992000000.0 | Kabul | .af | //upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Afghanistan.svg
-Albania | Europe | 28748.0 | 2845955.0 | 13039000000.0 | Tirana | .al | //upload.wikimedia.org/wikipedia/commons/3/36/Flag_of_Albania.svg
-Algeria | Africa | 2381741.0 | 43000000.0 | 167555000000.0 | Algiers | .dz | //upload.wikimedia.org/wikipedia/commons/7/77/Flag_of_Algeria.svg
-Andorra | Europe | 468.0 | 77543.0 | 3278000000.0 | Andorra la Vella | .ad | //upload.wikimedia.org/wikipedia/commons/1/19/Flag_of_Andorra.svg
-Angola | Africa | 1246700.0 | 31127674.0 | 126505000000.0 | Luanda | .ao | //upload.wikimedia.org/wikipedia/commons/9/9d/Flag_of_Angola.svg
-Antigua and Barbuda | Caribbean | 442.0 | 96453.0 | 1248000000.0 | St. John's | .ag | //upload.wikimedia.org/wikipedia/commons/8/89/Flag_of_Antigua_and_Barbuda.svg
-Argentina | South America | 2780400.0 | 44938712.0 | 637486000000.0 | Buenos Aires | .ar | //upload.wikimedia.org/wikipedia/commons/1/1a/Flag_of_Argentina.svg
-Armenia | Eurasia | 29743.0 | 2957500.0 | 11536000000.0 | Yerevan | .am | //upload.wikimedia.org/wikipedia/commons/2/2f/Flag_of_Armenia.svg
-Australia | Oceania | 7692024.0 | 25690023.0 | 1408675000000.0 | Canberra | .au | //upload.wikimedia.org/wikipedia/commons/8/88/Flag_of_Australia_%28converted%29.svg
-Austria | Europe | 83871.0 | 8902600.0 | 416835000000.0 | Vienna | .at | //upload.wikimedia.org/wikipedia/commons/4/41/Flag_of_Austria.svg
+```
++-----------+-------------+---------+----------+---------------+----------------+---+-----------------------------------------------------------------------------------+
+|name       |continent    |area     |population| gdp           | capital        |tld|flag                                                                               |
++-----------+-------------+---------+----------+---------------+----------------+---+-----------------------------------------------------------------------------------+
+|Afghanistan|Asia         | 652230.0|32225560.0|  21992000000.0|Kabul           |.af|//upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Afghanistan.svg              |
+|Albania    |Europe       |  28748.0| 2845955.0|  13039000000.0|Tirana          |.al|//upload.wikimedia.org/wikipedia/commons/3/36/Flag_of_Albania.svg                  |
+|Algeria    |Africa       |2381741.0|43000000.0| 167555000000.0|Algiers         |.dz|//upload.wikimedia.org/wikipedia/commons/7/77/Flag_of_Algeria.svg                  |
+|Andorra    |Europe       |    468.0|   77543.0|   3278000000.0|Andorra la Vella|.ad|//upload.wikimedia.org/wikipedia/commons/1/19/Flag_of_Andorra.svg                  |
+|Angola     |Africa       |1246700.0|31127674.0| 126505000000.0|Luanda          |.ao|//upload.wikimedia.org/wikipedia/commons/9/9d/Flag_of_Angola.svg                   |
+|Antigua and|Caribbean    |    442.0|   96453.0|   1248000000.0|St. John's      |.ag|//upload.wikimedia.org/wikipedia/commons/8/89/Flag_of_Antigua_and_Barbuda.svg      |
+|Barbuda    |             |         |          |               |                |   |                                                                                   |
+|Argentina  |South America|2780400.0|44938712.0| 637486000000.0|Buenos Aires    |.ar|//upload.wikimedia.org/wikipedia/commons/1/1a/Flag_of_Argentina.svg                |
+|Armenia    |Eurasia      |  29743.0| 2957500.0|  11536000000.0|Yerevan         |.am|//upload.wikimedia.org/wikipedia/commons/2/2f/Flag_of_Armenia.svg                  |
+|Australia  |Oceania      |7692024.0|25690023.0|1408675000000.0|Canberra        |.au|//upload.wikimedia.org/wikipedia/commons/8/88/Flag_of_Australia_%28converted%29.svg|
+|Austria    |Europe       |  83871.0| 8902600.0| 416835000000.0|Vienna          |.at|//upload.wikimedia.org/wikipedia/commons/4/41/Flag_of_Austria.svg                  |
++-----------+-------------+---------+----------+---------------+----------------+---+-----------------------------------------------------------------------------------+
 ```
 
 ## 目录 Table of Contents
